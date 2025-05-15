@@ -14,6 +14,7 @@ import ProfileSetup from "./pages/ProfileSetup";
 import SavedJobs from "./pages/SavedJobs";
 import JobsApplied from "./pages/JobsApplied";
 import Profile from "./pages/Profile";
+import Notifications from "./pages/Notifications";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -32,6 +33,7 @@ const App = () => (
           <Route path="/profile-setup" element={<ProfileSetup />} />
           <Route path="/saved-jobs" element={<SavedJobs />} />
           <Route path="/jobs-applied" element={<JobsApplied />} />
+          <Route path="/notifications" element={<Notifications />} />
           <Route path="/profile" element={<Profile />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />

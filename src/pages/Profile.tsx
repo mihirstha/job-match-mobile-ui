@@ -2,32 +2,36 @@
 import { useState } from "react";
 import MobileNavbar from "@/components/MobileNavbar";
 import { useToast } from "@/hooks/use-toast";
-import { Camera, Video, Upload, Edit, Play, Briefcase, GraduationCap, List } from "lucide-react";
+import { Camera, Video, Briefcase, GraduationCap, List, Edit, X, Check, Save } from "lucide-react";
 
 const Profile = () => {
   const [activeTab, setActiveTab] = useState("profile");
   const { toast } = useToast();
   
+  // Edit states
+  const [editingSection, setEditingSection] = useState(null);
+  const [editedContent, setEditedContent] = useState({});
+  
   // Mock profile data
-  const profile = {
+  const [profile, setProfile] = useState({
     name: "John Doe",
     title: "Senior Software Developer",
     email: "john.doe@example.com",
-    phone: "+1 (555) 123-4567",
-    location: "San Francisco, CA",
+    phone: "+977 98XXXXXXXX",
+    location: "Kathmandu, Nepal",
     about: "Experienced software developer with over 8 years of experience in web development, specializing in React, Node.js, and TypeScript.",
     experience: [
       {
         id: 1,
         title: "Senior Frontend Developer",
-        company: "TechCorp",
+        company: "TechCorp Nepal",
         duration: "2023 - Present",
         description: "Leading the frontend team in developing modern web applications using React and TypeScript."
       },
       {
         id: 2,
         title: "Full Stack Developer",
-        company: "InnovateTech",
+        company: "InnovateTech Nepal",
         duration: "2019 - 2023",
         description: "Developed full stack applications using React, Node.js, and MongoDB."
       }
@@ -37,17 +41,59 @@ const Profile = () => {
       {
         id: 1,
         degree: "Master of Computer Science",
-        institution: "Stanford University",
+        institution: "Kathmandu University",
         year: "2018"
       },
       {
         id: 2,
         degree: "Bachelor of Computer Science",
-        institution: "MIT",
+        institution: "Tribhuvan University",
         year: "2016"
       }
     ],
+    preferences: {
+      location: "Kathmandu, Nepal",
+      jobTypes: ["Full-time", "Remote"],
+      industries: ["Technology", "Finance"],
+      minSalary: "NPR 100,000",
+      workEnvironment: "Hybrid"
+    },
     videoResume: null
+  });
+  
+  const handleEditSection = (section) => {
+    setEditingSection(section);
+    setEditedContent({
+      ...profile[section]
+    });
+  };
+  
+  const handleCancelEdit = () => {
+    setEditingSection(null);
+    setEditedContent({});
+  };
+  
+  const handleSaveEdit = (section) => {
+    setProfile({
+      ...profile,
+      [section]: editedContent
+    });
+    
+    setEditingSection(null);
+    setEditedContent({});
+    
+    toast({
+      title: "Changes Saved",
+      description: `Your ${section} information has been updated.`,
+    });
+  };
+  
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setEditedContent({
+      ...editedContent,
+      [name]: value
+    });
   };
   
   const handleUploadVideo = () => {
@@ -73,8 +119,11 @@ const Profile = () => {
       <div className="mobile-page">
         <div className="space-y-6">
           <div className="flex flex-col items-center">
-            <div className="w-24 h-24 rounded-full bg-primary text-white text-3xl font-bold flex items-center justify-center mb-3">
+            <div className="w-24 h-24 rounded-full bg-primary text-white text-3xl font-bold flex items-center justify-center mb-3 relative">
               {profile.name.split(' ').map(n => n[0]).join('')}
+              <button className="absolute bottom-0 right-0 bg-white rounded-full p-1 shadow-md border border-gray-200">
+                <Camera size={18} className="text-primary" />
+              </button>
             </div>
             <h1 className="text-xl font-bold">{profile.name}</h1>
             <p className="text-muted-foreground">{profile.title}</p>
@@ -104,6 +153,16 @@ const Profile = () => {
             </button>
             <button
               className={`flex-1 py-3 text-sm font-medium ${
+                activeTab === "preferences"
+                  ? "text-primary border-b-2 border-primary"
+                  : "text-muted-foreground"
+              }`}
+              onClick={() => setActiveTab("preferences")}
+            >
+              Preferences
+            </button>
+            <button
+              className={`flex-1 py-3 text-sm font-medium ${
                 activeTab === "settings"
                   ? "text-primary border-b-2 border-primary"
                   : "text-muted-foreground"
@@ -117,8 +176,44 @@ const Profile = () => {
           {activeTab === "profile" && (
             <div className="space-y-6">
               <div>
-                <h2 className="text-lg font-semibold mb-2">About</h2>
-                <p className="text-sm">{profile.about}</p>
+                <div className="flex items-center justify-between mb-2">
+                  <h2 className="text-lg font-semibold">About</h2>
+                  {editingSection !== 'about' && (
+                    <button 
+                      className="text-primary text-sm flex items-center"
+                      onClick={() => handleEditSection('about')}
+                    >
+                      <Edit size={14} className="mr-1" /> Edit
+                    </button>
+                  )}
+                </div>
+                
+                {editingSection === 'about' ? (
+                  <div className="space-y-3">
+                    <textarea
+                      name="about"
+                      value={editedContent.about || profile.about}
+                      onChange={handleInputChange}
+                      className="w-full border border-border rounded-lg p-3 min-h-[100px]"
+                    />
+                    <div className="flex justify-end gap-2">
+                      <button 
+                        className="p-2 border border-border rounded-lg"
+                        onClick={handleCancelEdit}
+                      >
+                        <X size={18} />
+                      </button>
+                      <button 
+                        className="p-2 bg-primary text-white rounded-lg"
+                        onClick={() => handleSaveEdit('about')}
+                      >
+                        <Check size={18} />
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <p className="text-sm">{profile.about}</p>
+                )}
               </div>
 
               <div>
@@ -127,7 +222,10 @@ const Profile = () => {
                     <Briefcase size={18} className="mr-2" />
                     Experience
                   </h2>
-                  <button className="text-primary text-sm flex items-center">
+                  <button 
+                    className="text-primary text-sm flex items-center"
+                    onClick={() => handleEditSection('experience')}
+                  >
                     <Edit size={14} className="mr-1" /> Edit
                   </button>
                 </div>
@@ -148,7 +246,10 @@ const Profile = () => {
                     <List size={18} className="mr-2" />
                     Skills
                   </h2>
-                  <button className="text-primary text-sm flex items-center">
+                  <button 
+                    className="text-primary text-sm flex items-center"
+                    onClick={() => handleEditSection('skills')}
+                  >
                     <Edit size={14} className="mr-1" /> Edit
                   </button>
                 </div>
@@ -170,7 +271,10 @@ const Profile = () => {
                     <GraduationCap size={18} className="mr-2" />
                     Education
                   </h2>
-                  <button className="text-primary text-sm flex items-center">
+                  <button 
+                    className="text-primary text-sm flex items-center"
+                    onClick={() => handleEditSection('education')}
+                  >
                     <Edit size={14} className="mr-1" /> Edit
                   </button>
                 </div>
@@ -197,7 +301,9 @@ const Profile = () => {
                   <div className="relative rounded-lg overflow-hidden h-64 bg-gray-200">
                     <div className="absolute inset-0 flex items-center justify-center">
                       <button className="w-16 h-16 rounded-full bg-primary/90 flex items-center justify-center">
-                        <Play size={32} className="text-white ml-1" />
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-white ml-1">
+                          <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                        </svg>
                       </button>
                     </div>
                   </div>
@@ -216,13 +322,20 @@ const Profile = () => {
                         className="flex-1 flex items-center justify-center gap-2 py-3 border border-primary rounded-lg text-primary"
                         onClick={handleUploadVideo}
                       >
-                        <Upload size={18} />
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                          <polyline points="7 10 12 15 17 10"></polyline>
+                          <line x1="12" y1="15" x2="12" y2="3"></line>
+                        </svg>
                         Upload Video
                       </button>
                       <button 
                         className="flex-1 flex items-center justify-center gap-2 py-3 bg-primary rounded-lg text-white"
                       >
-                        <Camera size={18} />
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+                          <circle cx="12" cy="13" r="4"></circle>
+                        </svg>
                         Record New
                       </button>
                     </div>
@@ -239,6 +352,89 @@ const Profile = () => {
                   </>
                 )}
               </div>
+            </div>
+          )}
+
+          {activeTab === "preferences" && (
+            <div className="space-y-6">
+              <h2 className="text-lg font-semibold">Job Preferences</h2>
+              <p className="text-sm text-gray-500">Customize your job preferences to get better matches</p>
+              
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Preferred Location</label>
+                  <select className="w-full p-3 rounded-lg border border-border">
+                    <option value="any">Anywhere in Nepal</option>
+                    <option value="kathmandu" selected>Kathmandu</option>
+                    <option value="pokhara">Pokhara</option>
+                    <option value="lalitpur">Lalitpur</option>
+                    <option value="bhaktapur">Bhaktapur</option>
+                    <option value="remote">Remote Only</option>
+                  </select>
+                </div>
+                
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Job Types</label>
+                  <div className="grid grid-cols-2 gap-2">
+                    {["Full-time", "Part-time", "Contract", "Internship", "Remote", "Freelance"].map((type) => (
+                      <div key={type} className="flex items-center gap-2">
+                        <input 
+                          type="checkbox" 
+                          id={`type-${type}`} 
+                          defaultChecked={profile.preferences.jobTypes.includes(type)} 
+                          className="w-4 h-4 accent-primary"
+                        />
+                        <label htmlFor={`type-${type}`} className="text-sm">{type}</label>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Industries</label>
+                  <select className="w-full p-3 rounded-lg border border-border" multiple size={4}>
+                    <option value="technology" selected>Technology</option>
+                    <option value="finance" selected>Finance</option>
+                    <option value="healthcare">Healthcare</option>
+                    <option value="education">Education</option>
+                    <option value="retail">Retail</option>
+                    <option value="hospitality">Hospitality</option>
+                    <option value="manufacturing">Manufacturing</option>
+                  </select>
+                </div>
+                
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Minimum Salary (NPR)</label>
+                  <input 
+                    type="text" 
+                    className="w-full p-3 rounded-lg border border-border"
+                    defaultValue={profile.preferences.minSalary.replace("NPR ", "")}
+                  />
+                </div>
+                
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Work Environment</label>
+                  <div className="flex flex-wrap gap-2">
+                    {["In-Office", "Remote", "Hybrid"].map((env) => (
+                      <button
+                        key={env}
+                        className={`px-4 py-2 rounded-full text-sm border ${
+                          profile.preferences.workEnvironment === env 
+                            ? "bg-primary text-white border-primary" 
+                            : "border-gray-300"
+                        }`}
+                      >
+                        {env}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+              
+              <button className="btn-primary w-full flex items-center justify-center mt-4">
+                <Save size={18} className="mr-2" />
+                Save Preferences
+              </button>
             </div>
           )}
 
@@ -267,6 +463,10 @@ const Profile = () => {
                 
                 <button className="btn-outline w-full">
                   Privacy Settings
+                </button>
+                
+                <button className="btn-outline w-full">
+                  Notification Settings
                 </button>
                 
                 <button 

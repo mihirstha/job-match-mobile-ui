@@ -9,7 +9,7 @@ const Welcome = () => {
   const slides = [
     {
       title: "Find Your Dream Job",
-      description: "Discover thousands of job opportunities with just a swipe",
+      description: "Discover thousands of job opportunities across Nepal with just a swipe",
       image: "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?auto=format&fit=crop&w=800&q=80"
     },
     {
@@ -41,6 +41,14 @@ const Welcome = () => {
             >
               Skip
             </Link>
+          </div>
+          
+          <div className="flex items-center justify-center py-6">
+            <img 
+              src="/lovable-uploads/6d023d51-3e36-4395-81d8-133349e7eb9a.png" 
+              alt="Job Matchy Nepal Logo" 
+              className="h-16 object-contain"
+            />
           </div>
           
           <div className="flex-1 flex flex-col items-center justify-center p-5">

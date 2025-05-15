@@ -1,7 +1,7 @@
 
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Home, Bookmark, FileText, User } from "lucide-react";
+import { Home, Bookmark, Bell, FileText, User } from "lucide-react";
 
 const MobileNavbar = () => {
   const location = useLocation();
@@ -22,6 +22,11 @@ const MobileNavbar = () => {
       name: "Applied",
       path: "/jobs-applied",
       icon: <FileText size={22} />,
+    },
+    {
+      name: "Notifications",
+      path: "/notifications",
+      icon: <Bell size={22} />,
     },
     {
       name: "Profile",

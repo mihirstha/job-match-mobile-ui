@@ -1,12 +1,12 @@
 
-import { useState, useRef, useEffect } from "react";
-import { Search, Filter, Star, X, Bookmark } from "lucide-react";
+import { useState, useRef } from "react";
+import { Filter, Heart, X } from "lucide-react";
 import MobileNavbar from "@/components/MobileNavbar";
 import { useToast } from "@/hooks/use-toast";
 import JobDetails from "@/components/JobDetails";
+import JobFilter from "@/components/JobFilter";
 
 const Home = () => {
-  const [searchQuery, setSearchQuery] = useState("");
   const [showDetails, setShowDetails] = useState(false);
   const [selectedJob, setSelectedJob] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -19,9 +19,9 @@ const Home = () => {
     {
       id: 1,
       title: "Senior React Developer",
-      company: "TechCorp",
-      location: "Remote",
-      salary: "$120k - $150k",
+      company: "TechCorp Nepal",
+      location: "Kathmandu, Nepal",
+      salary: "₹120k - ₹150k",
       type: "Full-time",
       posted: "2 days ago",
       experience: "5+ years",
@@ -29,14 +29,22 @@ const Home = () => {
       logo: "T",
       logoColor: "#56c1ff",
       image: "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?auto=format&fit=crop&w=800&q=80",
-      description: "We are looking for an experienced React developer to join our team. You will be responsible for building and maintaining our web applications."
+      description: "We are looking for an experienced React developer to join our team. You will be responsible for building and maintaining our web applications.",
+      responsibilities: [
+        "Develop new user-facing features using React.js",
+        "Build reusable components and libraries for future use",
+        "Translate designs and wireframes into high-quality code",
+        "Optimize components for maximum performance",
+        "Collaborate with the design team to implement UI/UX features"
+      ],
+      requiresVideoResume: true
     },
     {
       id: 2,
       title: "UX/UI Designer",
-      company: "DesignStudio",
-      location: "New York, NY",
-      salary: "$90k - $110k",
+      company: "DesignStudio Nepal",
+      location: "Pokhara, Nepal",
+      salary: "₹90k - ₹110k",
       type: "Full-time",
       posted: "1 week ago",
       experience: "3+ years",
@@ -44,14 +52,22 @@ const Home = () => {
       logo: "D",
       logoColor: "#004d80",
       image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=800&q=80",
-      description: "Looking for a talented UX/UI designer to create beautiful and functional interfaces for our clients."
+      description: "Looking for a talented UX/UI designer to create beautiful and functional interfaces for our clients.",
+      responsibilities: [
+        "Create user-centered designs by understanding business requirements",
+        "Translate requirements into style guides, design systems, design patterns and attractive user interfaces",
+        "Create original graphic designs (e.g. images, sketches and tables)",
+        "Prepare and present rough drafts to stakeholders",
+        "Identify and troubleshoot UX problems (e.g. responsiveness)"
+      ],
+      requiresVideoResume: false
     },
     {
       id: 3,
       title: "Product Manager",
-      company: "ProductLabs",
-      location: "San Francisco, CA",
-      salary: "$130k - $160k",
+      company: "ProductLabs Nepal",
+      location: "Lalitpur, Nepal",
+      salary: "₹130k - ₹160k",
       type: "Full-time",
       posted: "3 days ago",
       experience: "4+ years",
@@ -59,14 +75,22 @@ const Home = () => {
       logo: "P",
       logoColor: "#6366f1",
       image: "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?auto=format&fit=crop&w=800&q=80",
-      description: "Join our team as a Product Manager to lead our product development efforts and ensure we're building the right solutions for our customers."
+      description: "Join our team as a Product Manager to lead our product development efforts and ensure we're building the right solutions for our customers.",
+      responsibilities: [
+        "Define the product vision, strategy, and roadmap",
+        "Gather and analyze feedback from customers, stakeholders and potential users",
+        "Work closely with engineering teams to deliver features",
+        "Define product features according to customer needs",
+        "Lead the product development lifecycle from conception to launch"
+      ],
+      requiresVideoResume: true
     },
     {
       id: 4,
       title: "Frontend Developer",
-      company: "WebWizards",
-      location: "Remote",
-      salary: "$80k - $100k",
+      company: "WebWizards Nepal",
+      location: "Bhaktapur, Nepal",
+      salary: "₹80k - ₹100k",
       type: "Contract",
       posted: "Just now",
       experience: "2+ years",
@@ -74,14 +98,22 @@ const Home = () => {
       logo: "W",
       logoColor: "#8b5cf6",
       image: "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&w=800&q=80",
-      description: "We're looking for a Frontend Developer to help build responsive and interactive web applications for our clients."
+      description: "We're looking for a Frontend Developer to help build responsive and interactive web applications for our clients.",
+      responsibilities: [
+        "Implement responsive designs that work across various screen sizes",
+        "Optimize applications for maximum speed and scalability",
+        "Collaborate with back-end developers and web designers",
+        "Develop new user-facing features",
+        "Build reusable code for future use"
+      ],
+      requiresVideoResume: false
     },
     {
       id: 5,
       title: "DevOps Engineer",
-      company: "CloudTech",
-      location: "Austin, TX",
-      salary: "$110k - $140k",
+      company: "CloudTech Nepal",
+      location: "Kathmandu, Nepal",
+      salary: "₹110k - ₹140k",
       type: "Full-time",
       posted: "5 days ago",
       experience: "3+ years",
@@ -89,15 +121,19 @@ const Home = () => {
       logo: "C",
       logoColor: "#ec4899",
       image: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=800&q=80",
-      description: "Join our DevOps team to help build and maintain our cloud infrastructure and deployment pipelines."
+      description: "Join our DevOps team to help build and maintain our cloud infrastructure and deployment pipelines.",
+      responsibilities: [
+        "Build and implement CI/CD pipelines",
+        "Automate infrastructure deployment using IaC tools",
+        "Monitor system performance and troubleshoot issues",
+        "Implement security best practices",
+        "Collaborate with development teams to improve deployment processes"
+      ],
+      requiresVideoResume: true
     }
   ];
 
-  const filteredJobs = jobListings.filter(job =>
-    job.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    job.company.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    job.location.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filteredJobs = jobListings;
 
   const handleCardSwipe = (direction) => {
     if (currentIndex >= filteredJobs.length) return;
@@ -116,9 +152,14 @@ const Home = () => {
       });
     } else if (direction === "up") {
       toast({
-        title: "Application Submitted",
-        description: `You've applied to ${job.title} at ${job.company}`,
+        title: "Application Initiated",
+        description: `Starting application for ${job.title} at ${job.company}`,
       });
+      
+      // Instead of just showing toast, now we'll navigate to job details with application intent
+      setSelectedJob({...job, applicationIntent: true});
+      setShowDetails(true);
+      return; // Don't move to next card yet since we're starting application flow
     }
 
     // Move to next card
@@ -191,26 +232,17 @@ const Home = () => {
     <div className="mobile-container">
       <div className="mobile-page">
         <div className="space-y-6">
-          <div className="flex justify-between items-center">
-            <div>
-              <h1 className="text-2xl font-bold">Find Jobs</h1>
-              <p className="text-muted-foreground">Discover your perfect career match</p>
-            </div>
-            <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-              <span className="text-primary font-semibold">JD</span>
-            </div>
-          </div>
-
-          <div className="flex space-x-2">
-            <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" size={18} />
-              <input
-                type="text"
-                placeholder="Search job titles, companies..."
-                className="w-full pl-9 pr-3 py-3 rounded-lg border border-border bg-background"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-2">
+              <img 
+                src="/lovable-uploads/7eff5569-5ee3-4e6a-9f7b-ff9e7644f1a1.png" 
+                alt="Job Matchy Nepal Logo" 
+                className="w-12 h-12 object-contain"
               />
+              <div>
+                <h1 className="text-2xl font-bold">Job Matchy Nepal</h1>
+                <p className="text-muted-foreground">Find your perfect job match</p>
+              </div>
             </div>
             <button 
               className="p-3 rounded-lg border border-border bg-background flex items-center justify-center"
@@ -289,14 +321,14 @@ const Home = () => {
                   className="w-14 h-14 rounded-full bg-primary shadow-lg flex items-center justify-center"
                   onClick={() => handleCardSwipe("up")}
                 >
-                  <Star size={24} className="text-white" />
+                  <span className="text-white font-semibold text-sm">Apply</span>
                 </button>
                 
                 <button 
                   className="w-14 h-14 rounded-full bg-white shadow-lg flex items-center justify-center"
                   onClick={() => handleCardSwipe("right")}
                 >
-                  <Bookmark size={24} className="text-green-500" />
+                  <Heart size={24} className="text-green-500" />
                 </button>
               </div>
             </div>
@@ -304,7 +336,7 @@ const Home = () => {
             <div className="h-[450px] flex items-center justify-center">
               <div className="text-center p-6">
                 <div className="mx-auto w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mb-4">
-                  <Search size={32} className="text-primary" />
+                  <Filter size={32} className="text-primary" />
                 </div>
                 <h3 className="text-xl font-semibold">No more jobs</h3>
                 <p className="text-muted-foreground mt-2">You've seen all available jobs matching your criteria</p>
