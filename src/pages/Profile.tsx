@@ -2,6 +2,7 @@
 import { useState } from "react";
 import MobileNavbar from "@/components/MobileNavbar";
 import { useToast } from "@/hooks/use-toast";
+import { Camera, Video, Upload, Edit, Play, Briefcase, GraduationCap, List } from "lucide-react";
 
 const Profile = () => {
   const [activeTab, setActiveTab] = useState("profile");
@@ -45,7 +46,15 @@ const Profile = () => {
         institution: "MIT",
         year: "2016"
       }
-    ]
+    ],
+    videoResume: null
+  };
+  
+  const handleUploadVideo = () => {
+    toast({
+      title: "Video Upload",
+      description: "Video resume upload functionality would be implemented here",
+    });
   };
   
   const handleLogout = () => {
@@ -85,13 +94,13 @@ const Profile = () => {
             </button>
             <button
               className={`flex-1 py-3 text-sm font-medium ${
-                activeTab === "preferences"
+                activeTab === "video"
                   ? "text-primary border-b-2 border-primary"
                   : "text-muted-foreground"
               }`}
-              onClick={() => setActiveTab("preferences")}
+              onClick={() => setActiveTab("video")}
             >
-              Preferences
+              Video Resume
             </button>
             <button
               className={`flex-1 py-3 text-sm font-medium ${
@@ -113,7 +122,15 @@ const Profile = () => {
               </div>
 
               <div>
-                <h2 className="text-lg font-semibold mb-2">Experience</h2>
+                <div className="flex items-center justify-between mb-2">
+                  <h2 className="text-lg font-semibold flex items-center">
+                    <Briefcase size={18} className="mr-2" />
+                    Experience
+                  </h2>
+                  <button className="text-primary text-sm flex items-center">
+                    <Edit size={14} className="mr-1" /> Edit
+                  </button>
+                </div>
                 <div className="space-y-4">
                   {profile.experience.map((exp) => (
                     <div key={exp.id} className="border-l-2 border-primary/30 pl-4">
@@ -126,7 +143,15 @@ const Profile = () => {
               </div>
 
               <div>
-                <h2 className="text-lg font-semibold mb-2">Skills</h2>
+                <div className="flex items-center justify-between mb-2">
+                  <h2 className="text-lg font-semibold flex items-center">
+                    <List size={18} className="mr-2" />
+                    Skills
+                  </h2>
+                  <button className="text-primary text-sm flex items-center">
+                    <Edit size={14} className="mr-1" /> Edit
+                  </button>
+                </div>
                 <div className="flex flex-wrap gap-2">
                   {profile.skills.map((skill) => (
                     <span 
@@ -140,7 +165,15 @@ const Profile = () => {
               </div>
 
               <div>
-                <h2 className="text-lg font-semibold mb-2">Education</h2>
+                <div className="flex items-center justify-between mb-2">
+                  <h2 className="text-lg font-semibold flex items-center">
+                    <GraduationCap size={18} className="mr-2" />
+                    Education
+                  </h2>
+                  <button className="text-primary text-sm flex items-center">
+                    <Edit size={14} className="mr-1" /> Edit
+                  </button>
+                </div>
                 <div className="space-y-4">
                   {profile.education.map((edu) => (
                     <div key={edu.id}>
@@ -152,74 +185,60 @@ const Profile = () => {
               </div>
 
               <button className="btn-outline w-full">
-                Edit Profile
+                Download Resume
               </button>
             </div>
           )}
 
-          {activeTab === "preferences" && (
+          {activeTab === "video" && (
             <div className="space-y-6">
-              <div>
-                <h2 className="text-lg font-semibold mb-2">Job Preferences</h2>
-                
-                <div className="space-y-4">
-                  <div>
-                    <h3 className="text-sm font-medium">Job Types</h3>
-                    <div className="flex flex-wrap gap-2 mt-2">
-                      <span className="bg-primary/10 text-primary text-sm px-3 py-1 rounded-full">
-                        Full-time
-                      </span>
-                      <span className="bg-primary/10 text-primary text-sm px-3 py-1 rounded-full">
-                        Remote
-                      </span>
+              <div className="bg-gray-50 rounded-xl p-5 text-center space-y-4">
+                {profile.videoResume ? (
+                  <div className="relative rounded-lg overflow-hidden h-64 bg-gray-200">
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <button className="w-16 h-16 rounded-full bg-primary/90 flex items-center justify-center">
+                        <Play size={32} className="text-white ml-1" />
+                      </button>
                     </div>
                   </div>
-                  
-                  <div>
-                    <h3 className="text-sm font-medium">Salary Expectation</h3>
-                    <p className="text-sm mt-1">$100,000 - $150,000</p>
-                  </div>
-                  
-                  <div>
-                    <h3 className="text-sm font-medium">Location Preference</h3>
-                    <p className="text-sm mt-1">Remote, San Francisco Bay Area</p>
-                  </div>
-                </div>
+                ) : (
+                  <>
+                    <div className="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center mx-auto">
+                      <Video size={32} className="text-primary" />
+                    </div>
+                    <h3 className="text-lg font-medium">Video Resume</h3>
+                    <p className="text-gray-600 text-sm">
+                      Create a 60-second video resume to introduce yourself to potential employers.
+                      A good video resume can significantly increase your chances of getting noticed.
+                    </p>
+                    <div className="flex gap-3">
+                      <button 
+                        className="flex-1 flex items-center justify-center gap-2 py-3 border border-primary rounded-lg text-primary"
+                        onClick={handleUploadVideo}
+                      >
+                        <Upload size={18} />
+                        Upload Video
+                      </button>
+                      <button 
+                        className="flex-1 flex items-center justify-center gap-2 py-3 bg-primary rounded-lg text-white"
+                      >
+                        <Camera size={18} />
+                        Record New
+                      </button>
+                    </div>
+                    <div className="text-sm text-gray-500 mt-4">
+                      <p className="font-medium mb-1">Tips for a great video resume:</p>
+                      <ul className="text-left list-disc list-inside space-y-1">
+                        <li>Keep it under 60 seconds</li>
+                        <li>Use good lighting and clear audio</li>
+                        <li>Dress professionally</li>
+                        <li>Highlight your key skills and experiences</li>
+                        <li>Be authentic and confident</li>
+                      </ul>
+                    </div>
+                  </>
+                )}
               </div>
-              
-              <div>
-                <h2 className="text-lg font-semibold mb-2">Notification Preferences</h2>
-                
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between">
-                    <label className="text-sm">Email Notifications</label>
-                    <label className="relative inline-flex items-center cursor-pointer">
-                      <input type="checkbox" defaultChecked className="sr-only peer" />
-                      <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary"></div>
-                    </label>
-                  </div>
-                  
-                  <div className="flex items-center justify-between">
-                    <label className="text-sm">Job Recommendations</label>
-                    <label className="relative inline-flex items-center cursor-pointer">
-                      <input type="checkbox" defaultChecked className="sr-only peer" />
-                      <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary"></div>
-                    </label>
-                  </div>
-                  
-                  <div className="flex items-center justify-between">
-                    <label className="text-sm">Application Updates</label>
-                    <label className="relative inline-flex items-center cursor-pointer">
-                      <input type="checkbox" defaultChecked className="sr-only peer" />
-                      <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary"></div>
-                    </label>
-                  </div>
-                </div>
-              </div>
-              
-              <button className="btn-outline w-full">
-                Update Preferences
-              </button>
             </div>
           )}
 
