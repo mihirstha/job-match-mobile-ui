@@ -1,6 +1,6 @@
 
 import { useState } from "react";
-import { X, Building, MapPin, Clock, DollarSign, Briefcase, ArrowRight } from "lucide-react";
+import { X, Building, MapPin, Clock, DollarSign, Briefcase, ArrowRight, Heart } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 interface JobDetailsProps {
@@ -37,6 +37,14 @@ const JobDetails = ({ job, onClose }: JobDetailsProps) => {
       title: "Job Saved",
       description: `${job.title} at ${job.company} has been saved`,
     });
+  };
+  
+  const handleReject = () => {
+    toast({
+      title: "Job Rejected",
+      description: `${job.title} has been rejected`,
+    });
+    onClose();
   };
 
   return (
@@ -154,9 +162,17 @@ const JobDetails = ({ job, onClose }: JobDetailsProps) => {
             
             <div className="fixed bottom-0 left-0 right-0 p-4 bg-white border-t flex gap-3">
               <button 
-                className="flex-1 py-3 border border-primary rounded-lg text-primary font-medium"
+                className="flex-1 py-3 border border-red-500 rounded-lg text-red-500 font-medium flex items-center justify-center"
+                onClick={handleReject}
+              >
+                <X size={18} className="mr-1" />
+                Reject
+              </button>
+              <button 
+                className="flex-1 py-3 border border-green-500 rounded-lg text-green-500 font-medium flex items-center justify-center"
                 onClick={handleSave}
               >
+                <Heart size={18} className="mr-1" />
                 Save
               </button>
               <button 
@@ -195,22 +211,31 @@ const JobDetails = ({ job, onClose }: JobDetailsProps) => {
                   <div className="space-y-4">
                     <div className="border-b pb-4">
                       <p className="text-gray-500 text-sm">Name</p>
-                      <p className="font-medium">John Doe</p>
+                      <p className="font-medium">Aarav Sharma</p>
                     </div>
                     <div className="border-b pb-4">
                       <p className="text-gray-500 text-sm">Email</p>
-                      <p className="font-medium">john.doe@example.com</p>
+                      <p className="font-medium">aarav.sharma@example.com</p>
                     </div>
                     <div className="border-b pb-4">
                       <p className="text-gray-500 text-sm">Phone</p>
                       <p className="font-medium">+977 98XXXXXXXX</p>
                     </div>
-                    <div>
-                      <p className="text-gray-500 text-sm">Resume</p>
-                      <div className="bg-primary/5 border border-primary/20 rounded p-3 mt-1 flex justify-between items-center">
-                        <span className="font-medium">John_Doe_Resume.pdf</span>
-                        <button className="text-primary text-sm">Change</button>
+                    <div className="border-b pb-4">
+                      <p className="text-gray-500 text-sm">Experience</p>
+                      <p className="font-medium">8 years</p>
+                    </div>
+                    <div className="border-b pb-4">
+                      <p className="text-gray-500 text-sm">Skills</p>
+                      <div className="flex flex-wrap gap-1 mt-1">
+                        <span className="bg-primary/10 text-primary text-xs px-2 py-1 rounded-full">React</span>
+                        <span className="bg-primary/10 text-primary text-xs px-2 py-1 rounded-full">TypeScript</span>
+                        <span className="bg-primary/10 text-primary text-xs px-2 py-1 rounded-full">Node.js</span>
                       </div>
+                    </div>
+                    <div>
+                      <p className="text-gray-500 text-sm">Education</p>
+                      <p className="font-medium">Master of Computer Science, Kathmandu University</p>
                     </div>
                   </div>
                 </div>

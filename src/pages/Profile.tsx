@@ -8,15 +8,15 @@ const Profile = () => {
   const [activeTab, setActiveTab] = useState("profile");
   const { toast } = useToast();
   
-  // Edit states
-  const [editingSection, setEditingSection] = useState(null);
-  const [editedContent, setEditedContent] = useState({});
+  // Edit states - fixing the type error by properly typing editedContent
+  const [editingSection, setEditingSection] = useState<string|null>(null);
+  const [editedContent, setEditedContent] = useState<Record<string, any>>({});
   
   // Mock profile data
   const [profile, setProfile] = useState({
-    name: "John Doe",
+    name: "Aarav Sharma",
     title: "Senior Software Developer",
-    email: "john.doe@example.com",
+    email: "aarav.sharma@example.com",
     phone: "+977 98XXXXXXXX",
     location: "Kathmandu, Nepal",
     about: "Experienced software developer with over 8 years of experience in web development, specializing in React, Node.js, and TypeScript.",
@@ -54,9 +54,9 @@ const Profile = () => {
     preferences: {
       location: "Kathmandu, Nepal",
       jobTypes: ["Full-time", "Remote"],
-      industries: ["Technology", "Finance"],
+      industries: ["Technology", "Finance", "Education", "Healthcare", "E-commerce"],
       minSalary: "NPR 100,000",
-      workEnvironment: "Hybrid"
+      workEnvironment: ["Hybrid"]
     },
     videoResume: null
   });
@@ -113,6 +113,55 @@ const Profile = () => {
       window.location.href = "/login";
     }, 1500);
   };
+  
+  const handleDeactivateAccount = () => {
+    toast({
+      title: "Account Deactivation",
+      description: "Your account will be deactivated. You can reactivate it by logging in again.",
+    });
+  };
+  
+  const handleDeleteAccount = () => {
+    toast({
+      title: "Account Deletion",
+      description: "Your account has been scheduled for deletion. This cannot be undone.",
+      variant: "destructive",
+    });
+  };
+
+  // Function to handle work environment selection
+  const toggleWorkEnvironment = (env) => {
+    const currentEnvironments = [...profile.preferences.workEnvironment];
+    
+    if (currentEnvironments.includes(env)) {
+      // Remove if already selected
+      const updatedEnvironments = currentEnvironments.filter(item => item !== env);
+      setProfile({
+        ...profile,
+        preferences: {
+          ...profile.preferences,
+          workEnvironment: updatedEnvironments
+        }
+      });
+    } else {
+      // Add if not selected
+      setProfile({
+        ...profile,
+        preferences: {
+          ...profile.preferences,
+          workEnvironment: [...currentEnvironments, env]
+        }
+      });
+    }
+  };
+
+  // Handle profile photo change
+  const handlePhotoChange = () => {
+    toast({
+      title: "Photo Update",
+      description: "Profile photo has been updated successfully.",
+    });
+  };
 
   return (
     <div className="mobile-container">
@@ -121,7 +170,10 @@ const Profile = () => {
           <div className="flex flex-col items-center">
             <div className="w-24 h-24 rounded-full bg-primary text-white text-3xl font-bold flex items-center justify-center mb-3 relative">
               {profile.name.split(' ').map(n => n[0]).join('')}
-              <button className="absolute bottom-0 right-0 bg-white rounded-full p-1 shadow-md border border-gray-200">
+              <button 
+                className="absolute bottom-0 right-0 bg-white rounded-full p-1 shadow-md border border-gray-200"
+                onClick={handlePhotoChange}
+              >
                 <Camera size={18} className="text-primary" />
               </button>
             </div>
@@ -400,6 +452,12 @@ const Profile = () => {
                     <option value="retail">Retail</option>
                     <option value="hospitality">Hospitality</option>
                     <option value="manufacturing">Manufacturing</option>
+                    <option value="agriculture">Agriculture</option>
+                    <option value="tourism">Tourism</option>
+                    <option value="construction">Construction</option>
+                    <option value="ecommerce">E-commerce</option>
+                    <option value="telecom">Telecommunications</option>
+                    <option value="ngos">NGOs/INGOs</option>
                   </select>
                 </div>
                 
@@ -419,10 +477,11 @@ const Profile = () => {
                       <button
                         key={env}
                         className={`px-4 py-2 rounded-full text-sm border ${
-                          profile.preferences.workEnvironment === env 
+                          profile.preferences.workEnvironment.includes(env) 
                             ? "bg-primary text-white border-primary" 
                             : "border-gray-300"
                         }`}
+                        onClick={() => toggleWorkEnvironment(env)}
                       >
                         {env}
                       </button>
@@ -467,6 +526,20 @@ const Profile = () => {
                 
                 <button className="btn-outline w-full">
                   Notification Settings
+                </button>
+                
+                <button 
+                  className="w-full py-3 text-yellow-500 font-medium border border-yellow-200 rounded-lg"
+                  onClick={handleDeactivateAccount}
+                >
+                  Deactivate Account
+                </button>
+                
+                <button 
+                  className="w-full py-3 text-red-500 font-medium border border-red-200 rounded-lg"
+                  onClick={handleDeleteAccount}
+                >
+                  Delete Account
                 </button>
                 
                 <button 

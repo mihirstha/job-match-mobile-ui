@@ -253,10 +253,10 @@ const Home = () => {
           </div>
 
           {currentIndex < filteredJobs.length ? (
-            <div className="h-[450px] relative flex items-center justify-center">
+            <div className="h-[480px] relative flex items-center justify-center mt-4">
               <div 
                 ref={cardRef}
-                className="absolute bg-white rounded-xl border border-border overflow-hidden shadow-lg w-full"
+                className="absolute bg-white rounded-xl border border-border overflow-hidden shadow-lg w-full h-[420px]"
                 onTouchStart={onTouchStart}
                 onTouchMove={onTouchMove}
                 onTouchEnd={onTouchEnd}
@@ -309,31 +309,31 @@ const Home = () => {
                 </div>
               </div>
 
-              <div className="absolute bottom-5 w-full flex justify-between px-8 z-10">
+              <div className="absolute bottom-3 w-full flex justify-between px-8 z-10">
                 <button 
-                  className="w-14 h-14 rounded-full bg-white shadow-lg flex items-center justify-center"
+                  className="w-16 h-16 rounded-full bg-white shadow-lg flex items-center justify-center"
                   onClick={() => handleCardSwipe("left")}
                 >
-                  <X size={24} className="text-red-500" />
+                  <X size={28} className="text-red-500" />
                 </button>
                 
                 <button 
-                  className="w-14 h-14 rounded-full bg-primary shadow-lg flex items-center justify-center"
+                  className="w-16 h-16 rounded-full bg-primary shadow-lg flex items-center justify-center"
                   onClick={() => handleCardSwipe("up")}
                 >
-                  <span className="text-white font-semibold text-sm">Apply</span>
+                  <span className="text-white font-semibold">Apply</span>
                 </button>
                 
                 <button 
-                  className="w-14 h-14 rounded-full bg-white shadow-lg flex items-center justify-center"
+                  className="w-16 h-16 rounded-full bg-white shadow-lg flex items-center justify-center"
                   onClick={() => handleCardSwipe("right")}
                 >
-                  <Heart size={24} className="text-green-500" />
+                  <Heart size={28} className="text-green-500" />
                 </button>
               </div>
             </div>
           ) : (
-            <div className="h-[450px] flex items-center justify-center">
+            <div className="h-[480px] flex items-center justify-center">
               <div className="text-center p-6">
                 <div className="mx-auto w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mb-4">
                   <Filter size={32} className="text-primary" />
