@@ -1,6 +1,6 @@
 
 import { useState, useRef } from "react";
-import { Filter, Heart, X } from "lucide-react";
+import { Filter, Heart, X, Star } from "lucide-react";
 import MobileNavbar from "@/components/MobileNavbar";
 import { useToast } from "@/hooks/use-toast";
 import JobDetails from "@/components/JobDetails";
@@ -253,16 +253,16 @@ const Home = () => {
           </div>
 
           {currentIndex < filteredJobs.length ? (
-            <div className="h-[480px] relative flex items-center justify-center mt-4">
+            <div className="h-[500px] relative flex items-center justify-center mt-4">
               <div 
                 ref={cardRef}
-                className="absolute bg-white rounded-xl border border-border overflow-hidden shadow-lg w-full h-[420px]"
+                className="absolute bg-white rounded-xl border border-border overflow-hidden shadow-lg w-full h-[450px]"
                 onTouchStart={onTouchStart}
                 onTouchMove={onTouchMove}
                 onTouchEnd={onTouchEnd}
                 onClick={() => handleCardClick(filteredJobs[currentIndex])}
               >
-                <div className="relative h-52 bg-gray-100">
+                <div className="relative h-64 bg-gray-100">
                   <img 
                     src={filteredJobs[currentIndex].image} 
                     alt={filteredJobs[currentIndex].title}
@@ -309,10 +309,11 @@ const Home = () => {
                 </div>
               </div>
 
-              <div className="absolute bottom-3 w-full flex justify-between px-8 z-10">
+              <div className="absolute bottom-10 w-full flex justify-between px-8 z-10">
                 <button 
                   className="w-16 h-16 rounded-full bg-white shadow-lg flex items-center justify-center"
                   onClick={() => handleCardSwipe("left")}
+                  aria-label="Reject job"
                 >
                   <X size={28} className="text-red-500" />
                 </button>
@@ -320,20 +321,23 @@ const Home = () => {
                 <button 
                   className="w-16 h-16 rounded-full bg-primary shadow-lg flex items-center justify-center"
                   onClick={() => handleCardSwipe("up")}
+                  aria-label="Apply for job"
+                  title="Apply"
                 >
-                  <span className="text-white font-semibold">Apply</span>
+                  <Star size={28} className="text-white" />
                 </button>
                 
                 <button 
                   className="w-16 h-16 rounded-full bg-white shadow-lg flex items-center justify-center"
                   onClick={() => handleCardSwipe("right")}
+                  aria-label="Save job"
                 >
                   <Heart size={28} className="text-green-500" />
                 </button>
               </div>
             </div>
           ) : (
-            <div className="h-[480px] flex items-center justify-center">
+            <div className="h-[500px] flex items-center justify-center">
               <div className="text-center p-6">
                 <div className="mx-auto w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mb-4">
                   <Filter size={32} className="text-primary" />

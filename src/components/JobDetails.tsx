@@ -1,6 +1,6 @@
 
 import { useState } from "react";
-import { X, Building, MapPin, Clock, DollarSign, Briefcase, ArrowRight, Heart } from "lucide-react";
+import { X, Building, MapPin, Clock, DollarSign, Briefcase, ArrowRight, Heart, Star } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 interface JobDetailsProps {
@@ -48,7 +48,7 @@ const JobDetails = ({ job, onClose }: JobDetailsProps) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 z-50 flex items-end">
+    <div className="fixed inset-0 bg-black/50 z-50 flex items-end justify-center">
       <div className="bg-white rounded-t-2xl w-full h-[90vh] overflow-auto animate-slide-in-bottom">
         {applicationStep === null && (
           <>
@@ -176,10 +176,11 @@ const JobDetails = ({ job, onClose }: JobDetailsProps) => {
                 Save
               </button>
               <button 
-                className="flex-1 py-3 bg-primary rounded-lg text-white font-medium"
+                className="flex-1 py-3 bg-primary rounded-lg text-white font-medium flex items-center justify-center"
                 onClick={handleApply}
               >
-                Apply Now
+                <Star size={18} className="mr-1" />
+                Apply
               </button>
             </div>
           </>
@@ -199,7 +200,7 @@ const JobDetails = ({ job, onClose }: JobDetailsProps) => {
               </div>
             </div>
             
-            <div className="p-5">
+            <div className="p-5 pb-32 max-h-[90vh] overflow-y-auto">
               <div className="bg-gray-50 p-4 rounded-lg mb-6">
                 <h3 className="font-semibold text-lg mb-1">{job.title}</h3>
                 <p className="text-gray-600">{job.company} • {job.location}</p>
@@ -247,17 +248,17 @@ const JobDetails = ({ job, onClose }: JobDetailsProps) => {
                     </p>
                   </div>
                 )}
-                
-                <div className="pt-4">
-                  <button 
-                    className="w-full py-3 bg-primary rounded-lg text-white font-medium flex items-center justify-center"
-                    onClick={handleConfirmApplication}
-                  >
-                    Confirm & Continue
-                    <ArrowRight size={16} className="ml-1" />
-                  </button>
-                </div>
               </div>
+            </div>
+            
+            <div className="fixed bottom-0 left-0 right-0 p-4 bg-white border-t">
+              <button 
+                className="w-full py-3 bg-primary rounded-lg text-white font-medium flex items-center justify-center"
+                onClick={handleConfirmApplication}
+              >
+                Continue
+                <ArrowRight size={16} className="ml-1" />
+              </button>
             </div>
           </>
         )}
@@ -276,7 +277,7 @@ const JobDetails = ({ job, onClose }: JobDetailsProps) => {
               </div>
             </div>
             
-            <div className="p-5">
+            <div className="p-5 pb-32 max-h-[90vh] overflow-y-auto">
               <div className="space-y-6">
                 <div className="bg-primary/5 rounded-xl p-5 text-center space-y-4">
                   <div className="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center mx-auto">
@@ -313,21 +314,23 @@ const JobDetails = ({ job, onClose }: JobDetailsProps) => {
                     </button>
                   </div>
                 </div>
-                
-                <button 
-                  className="w-full py-3 bg-primary rounded-lg text-white font-medium mt-4"
-                  onClick={completeApplication}
-                >
-                  Submit Application
-                </button>
-                
-                <button 
-                  className="w-full py-3 border border-gray-300 rounded-lg text-gray-600 font-medium"
-                  onClick={() => setApplicationStep('confirm')}
-                >
-                  Back
-                </button>
               </div>
+            </div>
+            
+            <div className="fixed bottom-0 left-0 right-0 p-4 bg-white border-t space-y-3">
+              <button 
+                className="w-full py-3 bg-primary rounded-lg text-white font-medium"
+                onClick={completeApplication}
+              >
+                Submit Application
+              </button>
+              
+              <button 
+                className="w-full py-3 border border-gray-300 rounded-lg text-gray-600 font-medium"
+                onClick={() => setApplicationStep('confirm')}
+              >
+                Back
+              </button>
             </div>
           </>
         )}
