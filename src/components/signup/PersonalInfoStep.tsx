@@ -67,6 +67,45 @@ const PersonalInfoStep = ({ formData, updateFormData }: PersonalInfoStepProps) =
           </button>
         </div>
       </div>
+
+      <div className="space-y-2">
+        <label className="text-sm font-medium">Disability Status (Optional)</label>
+        <div className="grid grid-cols-2 gap-3">
+          <button
+            type="button"
+            className={`p-3 rounded-lg border text-center ${
+              formData.disability === "yes"
+                ? "border-primary bg-primary/10 text-primary"
+                : "border-border"
+            }`}
+            onClick={() => updateFormData("disability", "yes")}
+          >
+            Yes
+          </button>
+          <button
+            type="button"
+            className={`p-3 rounded-lg border text-center ${
+              formData.disability === "no"
+                ? "border-primary bg-primary/10 text-primary"
+                : "border-border"
+            }`}
+            onClick={() => updateFormData("disability", "no")}
+          >
+            No
+          </button>
+        </div>
+        {formData.disability === "yes" && (
+          <div className="mt-2">
+            <input
+              type="text"
+              placeholder="Please specify (optional)"
+              value={formData.disabilityDetails || ""}
+              onChange={(e) => updateFormData("disabilityDetails", e.target.value)}
+              className="input-field w-full"
+            />
+          </div>
+        )}
+      </div>
     </div>
   );
 };

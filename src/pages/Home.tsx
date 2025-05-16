@@ -21,7 +21,7 @@ const Home = () => {
       title: "Senior React Developer",
       company: "TechCorp Nepal",
       location: "Kathmandu, Nepal",
-      salary: "₹120k - ₹150k",
+      salary: "₹1.2 lakhs - ₹1.5 lakhs",
       type: "Full-time",
       posted: "2 days ago",
       experience: "5+ years",
@@ -44,7 +44,7 @@ const Home = () => {
       title: "UX/UI Designer",
       company: "DesignStudio Nepal",
       location: "Pokhara, Nepal",
-      salary: "₹90k - ₹110k",
+      salary: "₹90k - ₹1.1 lakhs",
       type: "Full-time",
       posted: "1 week ago",
       experience: "3+ years",
@@ -67,7 +67,7 @@ const Home = () => {
       title: "Product Manager",
       company: "ProductLabs Nepal",
       location: "Lalitpur, Nepal",
-      salary: "₹130k - ₹160k",
+      salary: "₹1.3 lakhs - ₹1.6 lakhs",
       type: "Full-time",
       posted: "3 days ago",
       experience: "4+ years",
@@ -90,7 +90,7 @@ const Home = () => {
       title: "Frontend Developer",
       company: "WebWizards Nepal",
       location: "Bhaktapur, Nepal",
-      salary: "₹80k - ₹100k",
+      salary: "₹80k - ₹1 lakh",
       type: "Contract",
       posted: "Just now",
       experience: "2+ years",
@@ -113,7 +113,7 @@ const Home = () => {
       title: "DevOps Engineer",
       company: "CloudTech Nepal",
       location: "Kathmandu, Nepal",
-      salary: "₹110k - ₹140k",
+      salary: "₹1.1 lakhs - ₹1.4 lakhs",
       type: "Full-time",
       posted: "5 days ago",
       experience: "3+ years",
@@ -253,10 +253,10 @@ const Home = () => {
           </div>
 
           {currentIndex < filteredJobs.length ? (
-            <div className="h-[500px] relative flex items-center justify-center mt-4">
+            <div className="h-[540px] relative flex items-center justify-center mt-4">
               <div 
                 ref={cardRef}
-                className="absolute bg-white rounded-xl border border-border overflow-hidden shadow-lg w-full h-[450px]"
+                className="absolute bg-white rounded-xl border border-border overflow-hidden shadow-lg w-full h-[480px]"
                 onTouchStart={onTouchStart}
                 onTouchMove={onTouchMove}
                 onTouchEnd={onTouchEnd}
@@ -309,7 +309,7 @@ const Home = () => {
                 </div>
               </div>
 
-              <div className="absolute bottom-10 w-full flex justify-between px-8 z-10">
+              <div className="absolute bottom-20 w-full flex justify-between px-8 z-10">
                 <button 
                   className="w-16 h-16 rounded-full bg-white shadow-lg flex items-center justify-center"
                   onClick={() => handleCardSwipe("left")}

@@ -1,6 +1,6 @@
 
 import { useState } from "react";
-import { X, Building, MapPin, Clock, DollarSign, Briefcase, ArrowRight, Heart, Star } from "lucide-react";
+import { X, Building, MapPin, Clock, Briefcase, ArrowRight, Heart, Star } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 interface JobDetailsProps {
@@ -88,7 +88,6 @@ const JobDetails = ({ job, onClose }: JobDetailsProps) => {
                 
                 <div className="bg-gray-50 p-3 rounded-lg">
                   <div className="flex items-center gap-2 text-gray-600 mb-1">
-                    <DollarSign size={16} />
                     <span className="text-sm">Salary</span>
                   </div>
                   <p className="font-medium">{job.salary}</p>
@@ -179,7 +178,7 @@ const JobDetails = ({ job, onClose }: JobDetailsProps) => {
                 className="flex-1 py-3 bg-primary rounded-lg text-white font-medium flex items-center justify-center"
                 onClick={handleApply}
               >
-                <Star size={18} className="mr-1" />
+                <Star size={18} className="mr-1" title="Apply" />
                 Apply
               </button>
             </div>
@@ -240,18 +239,17 @@ const JobDetails = ({ job, onClose }: JobDetailsProps) => {
                     </div>
                   </div>
                 </div>
-                
-                {job.requiresVideoResume && (
-                  <div className="p-4 bg-yellow-50 rounded-lg border border-yellow-200">
-                    <p className="text-sm text-yellow-800">
-                      <span className="font-medium">Note:</span> This job requires a video resume. You'll be prompted to record or upload one after confirming.
-                    </p>
-                  </div>
-                )}
               </div>
             </div>
             
             <div className="fixed bottom-0 left-0 right-0 p-4 bg-white border-t">
+              {job.requiresVideoResume && (
+                <div className="p-4 bg-yellow-50 rounded-lg border border-yellow-200 mb-4">
+                  <p className="text-sm text-yellow-800">
+                    <span className="font-medium">Note:</span> This job requires a video resume. You'll be prompted to record or upload one after confirming.
+                  </p>
+                </div>
+              )}
               <button 
                 className="w-full py-3 bg-primary rounded-lg text-white font-medium flex items-center justify-center"
                 onClick={handleConfirmApplication}
