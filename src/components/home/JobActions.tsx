@@ -9,30 +9,30 @@ interface JobActionsProps {
 
 const JobActions = ({ onReject, onApply, onSave }: JobActionsProps) => {
   return (
-    <div className="absolute bottom-2 w-full flex justify-between px-8 z-10">
+    <div className="absolute bottom-4 w-full flex justify-between px-8 z-10">
       <button 
-        className="w-16 h-16 rounded-full bg-white shadow-lg flex items-center justify-center"
+        className="w-14 h-14 rounded-full bg-white shadow-lg flex items-center justify-center"
         onClick={onReject}
         aria-label="Reject job"
       >
-        <X size={28} className="text-red-500" />
+        <X size={24} className="text-red-500" />
       </button>
       
       <button 
-        className="w-16 h-16 rounded-full bg-primary shadow-lg flex items-center justify-center"
+        className="w-14 h-14 rounded-full bg-primary shadow-lg flex items-center justify-center"
         onClick={onApply}
         aria-label="Apply for job"
         title="Apply"
       >
-        <Star size={28} className="text-white" />
+        <Star size={24} className="text-white" />
       </button>
       
       <button 
-        className="w-16 h-16 rounded-full bg-white shadow-lg flex items-center justify-center"
+        className="w-14 h-14 rounded-full bg-white shadow-lg flex items-center justify-center"
         onClick={onSave}
         aria-label="Save job"
       >
-        <Heart size={28} className="text-green-500" />
+        <Heart size={24} className="text-green-500" />
       </button>
     </div>
   );

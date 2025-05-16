@@ -1,10 +1,11 @@
 
 import { useState } from "react";
-import { X, Building, MapPin, Clock, Briefcase, ArrowRight, Heart, Star } from "lucide-react";
+import { X, MapPin, Clock, Briefcase, ArrowRight, Heart, Star } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { type JobListing } from "@/data/jobListings";
 
 interface JobDetailsProps {
-  job: any;
+  job: JobListing & { applicationIntent?: boolean; requiresVideoResume?: boolean };
   onClose: () => void;
 }
 
@@ -199,7 +200,7 @@ const JobDetails = ({ job, onClose }: JobDetailsProps) => {
               </div>
             </div>
             
-            <div className="p-5 pb-24">
+            <div className="p-5 pb-32">
               <div className="bg-gray-50 p-4 rounded-lg mb-6">
                 <h3 className="font-semibold text-lg mb-1">{job.title}</h3>
                 <p className="text-gray-600">{job.company} • {job.location}</p>
@@ -240,17 +241,9 @@ const JobDetails = ({ job, onClose }: JobDetailsProps) => {
                   </div>
                 </div>
               </div>
-              
-              {job.requiresVideoResume && (
-                <div className="p-4 bg-yellow-50 rounded-lg border border-yellow-200 mt-6">
-                  <p className="text-sm text-yellow-800">
-                    <span className="font-medium">Note:</span> This job requires a video resume. You'll be prompted to record or upload one after confirming.
-                  </p>
-                </div>
-              )}
             </div>
             
-            <div className="sticky bottom-0 left-0 right-0 p-4 bg-white border-t">
+            <div className="sticky bottom-0 left-0 right-0 p-4 bg-white border-t flex flex-col space-y-4">
               <button 
                 className="w-full py-3 bg-primary rounded-lg text-white font-medium flex items-center justify-center"
                 onClick={handleConfirmApplication}
@@ -258,6 +251,14 @@ const JobDetails = ({ job, onClose }: JobDetailsProps) => {
                 Confirm and Continue
                 <ArrowRight size={16} className="ml-1" />
               </button>
+              
+              {job.requiresVideoResume && (
+                <div className="p-3 bg-yellow-50 rounded-lg border border-yellow-200">
+                  <p className="text-sm text-yellow-800">
+                    <span className="font-medium">Note:</span> This job requires a video resume. You'll be prompted to record or upload one after confirming.
+                  </p>
+                </div>
+              )}
             </div>
           </>
         )}

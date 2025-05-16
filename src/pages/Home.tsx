@@ -43,11 +43,11 @@ const Home = () => {
   return (
     <div className="mobile-container">
       <div className="mobile-page">
-        <div className="space-y-6">
+        <div className="space-y-4">
           <Header onFilterClick={() => setShowFilter(true)} />
 
           {currentIndex < filteredJobs.length ? (
-            <div className="h-[580px] relative flex items-center justify-center mt-4">
+            <div className="h-[520px] relative flex items-center justify-center">
               <JobCard 
                 job={filteredJobs[currentIndex]}
                 cardRef={cardRef}
