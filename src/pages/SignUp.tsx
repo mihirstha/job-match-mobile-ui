@@ -242,7 +242,7 @@ const SignUp = () => {
               {step < 6 ? (
                 <button 
                   type="button" 
-                  className={`btn-primary ${step === 1 ? "w-full" : "px-8"} ml-auto`}
+                  className={`btn-primary ${step === 1 ? "w-full" : "w-auto px-8"} ml-auto flex items-center justify-center`}
                   onClick={handleNext}
                 >
                   Continue
@@ -251,7 +251,7 @@ const SignUp = () => {
               ) : (
                 <button 
                   type="button" 
-                  className="btn-primary px-8 ml-auto"
+                  className="btn-primary w-auto px-8 ml-auto flex items-center justify-center"
                   onClick={handleSubmit}
                 >
                   Finish Setup

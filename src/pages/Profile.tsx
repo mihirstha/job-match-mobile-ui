@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import MobileNavbar from "@/components/MobileNavbar";
 import { useToast } from "@/hooks/use-toast";
@@ -161,6 +160,127 @@ const Profile = () => {
       title: "Photo Update",
       description: "Profile photo has been updated successfully.",
     });
+  };
+
+  const [showPrivacySettings, setShowPrivacySettings] = useState(false);
+  const [showNotificationSettings, setShowNotificationSettings] = useState(false);
+  
+  // Privacy settings panel
+  const renderPrivacySettings = () => {
+    if (!showPrivacySettings) return null;
+    
+    return (
+      <div className="fixed inset-0 bg-black/50 z-50 flex items-end justify-center">
+        <div className="bg-white rounded-t-2xl w-full max-h-[90vh] overflow-auto animate-slide-in-bottom">
+          <div className="sticky top-0 bg-white z-10">
+            <div className="flex justify-between items-center p-4 border-b">
+              <h2 className="text-xl font-semibold">Privacy Settings</h2>
+              <button
+                onClick={() => setShowPrivacySettings(false)}
+                className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100"
+              >
+                <X size={18} />
+              </button>
+            </div>
+          </div>
+          
+          <div className="p-5 space-y-4">
+            <div className="space-y-2">
+              <h3 className="font-medium">Profile Visibility</h3>
+              <div className="flex items-center justify-between">
+                <span>Show my profile to recruiters</span>
+                <input type="checkbox" defaultChecked className="w-4 h-4 accent-primary" />
+              </div>
+              <div className="flex items-center justify-between">
+                <span>Show my profile in search results</span>
+                <input type="checkbox" defaultChecked className="w-4 h-4 accent-primary" />
+              </div>
+            </div>
+            
+            <div className="space-y-2">
+              <h3 className="font-medium">Data Privacy</h3>
+              <div className="flex items-center justify-between">
+                <span>Allow data for job recommendations</span>
+                <input type="checkbox" defaultChecked className="w-4 h-4 accent-primary" />
+              </div>
+            </div>
+            
+            <div className="space-y-2 pt-4 border-t">
+              <button 
+                className="w-full py-3 text-yellow-500 font-medium border border-yellow-200 rounded-lg"
+                onClick={handleDeactivateAccount}
+              >
+                Deactivate Account
+              </button>
+              
+              <button 
+                className="w-full py-3 text-red-500 font-medium border border-red-200 rounded-lg"
+                onClick={handleDeleteAccount}
+              >
+                Delete Account
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  };
+  
+  // Notification settings panel
+  const renderNotificationSettings = () => {
+    if (!showNotificationSettings) return null;
+    
+    return (
+      <div className="fixed inset-0 bg-black/50 z-50 flex items-end justify-center">
+        <div className="bg-white rounded-t-2xl w-full max-h-[90vh] overflow-auto animate-slide-in-bottom">
+          <div className="sticky top-0 bg-white z-10">
+            <div className="flex justify-between items-center p-4 border-b">
+              <h2 className="text-xl font-semibold">Notification Settings</h2>
+              <button
+                onClick={() => setShowNotificationSettings(false)}
+                className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100"
+              >
+                <X size={18} />
+              </button>
+            </div>
+          </div>
+          
+          <div className="p-5 space-y-4">
+            <div className="space-y-2">
+              <h3 className="font-medium">Email Notifications</h3>
+              <div className="flex items-center justify-between">
+                <span>Job recommendations</span>
+                <input type="checkbox" defaultChecked className="w-4 h-4 accent-primary" />
+              </div>
+              <div className="flex items-center justify-between">
+                <span>Application updates</span>
+                <input type="checkbox" defaultChecked className="w-4 h-4 accent-primary" />
+              </div>
+              <div className="flex items-center justify-between">
+                <span>Interview invitations</span>
+                <input type="checkbox" defaultChecked className="w-4 h-4 accent-primary" />
+              </div>
+            </div>
+            
+            <div className="space-y-2">
+              <h3 className="font-medium">Push Notifications</h3>
+              <div className="flex items-center justify-between">
+                <span>Job matches</span>
+                <input type="checkbox" defaultChecked className="w-4 h-4 accent-primary" />
+              </div>
+              <div className="flex items-center justify-between">
+                <span>Application status changes</span>
+                <input type="checkbox" defaultChecked className="w-4 h-4 accent-primary" />
+              </div>
+              <div className="flex items-center justify-between">
+                <span>Messages from recruiters</span>
+                <input type="checkbox" defaultChecked className="w-4 h-4 accent-primary" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
   };
 
   return (
@@ -520,26 +640,18 @@ const Profile = () => {
                   Change Password
                 </button>
                 
-                <button className="btn-outline w-full">
+                <button 
+                  className="btn-outline w-full"
+                  onClick={() => setShowPrivacySettings(true)}
+                >
                   Privacy Settings
                 </button>
                 
-                <button className="btn-outline w-full">
+                <button 
+                  className="btn-outline w-full"
+                  onClick={() => setShowNotificationSettings(true)}
+                >
                   Notification Settings
-                </button>
-                
-                <button 
-                  className="w-full py-3 text-yellow-500 font-medium border border-yellow-200 rounded-lg"
-                  onClick={handleDeactivateAccount}
-                >
-                  Deactivate Account
-                </button>
-                
-                <button 
-                  className="w-full py-3 text-red-500 font-medium border border-red-200 rounded-lg"
-                  onClick={handleDeleteAccount}
-                >
-                  Delete Account
                 </button>
                 
                 <button 
@@ -551,6 +663,10 @@ const Profile = () => {
               </div>
             </div>
           )}
+          
+          {/* Render modals */}
+          {renderPrivacySettings()}
+          {renderNotificationSettings()}
         </div>
       </div>
       <MobileNavbar />

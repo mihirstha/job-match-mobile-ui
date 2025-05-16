@@ -9,7 +9,7 @@ interface JobActionsProps {
 
 const JobActions = ({ onReject, onApply, onSave }: JobActionsProps) => {
   return (
-    <div className="absolute bottom-10 w-full flex justify-between px-8 z-10">
+    <div className="absolute bottom-2 w-full flex justify-between px-8 z-10">
       <button 
         className="w-16 h-16 rounded-full bg-white shadow-lg flex items-center justify-center"
         onClick={onReject}

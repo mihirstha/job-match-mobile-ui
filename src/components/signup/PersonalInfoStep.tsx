@@ -31,13 +31,11 @@ const PersonalInfoStep = ({ formData, updateFormData }: PersonalInfoStepProps) =
 
       <div className="space-y-2">
         <label className="text-sm font-medium">Gender</label>
-        <div className="grid grid-cols-3 gap-3">
+        <div className="grid grid-cols-3 gap-2">
           <button
             type="button"
-            className={`p-3 rounded-lg border text-center ${
-              formData.gender === "male"
-                ? "border-primary bg-primary/10 text-primary"
-                : "border-border"
+            className={`py-2 px-4 rounded-lg border ${
+              formData.gender === "male" ? "bg-primary text-white" : "bg-white"
             }`}
             onClick={() => updateFormData("gender", "male")}
           >
@@ -45,10 +43,8 @@ const PersonalInfoStep = ({ formData, updateFormData }: PersonalInfoStepProps) =
           </button>
           <button
             type="button"
-            className={`p-3 rounded-lg border text-center ${
-              formData.gender === "female"
-                ? "border-primary bg-primary/10 text-primary"
-                : "border-border"
+            className={`py-2 px-4 rounded-lg border ${
+              formData.gender === "female" ? "bg-primary text-white" : "bg-white"
             }`}
             onClick={() => updateFormData("gender", "female")}
           >
@@ -56,10 +52,8 @@ const PersonalInfoStep = ({ formData, updateFormData }: PersonalInfoStepProps) =
           </button>
           <button
             type="button"
-            className={`p-3 rounded-lg border text-center ${
-              formData.gender === "other"
-                ? "border-primary bg-primary/10 text-primary"
-                : "border-border"
+            className={`py-2 px-4 rounded-lg border ${
+              formData.gender === "other" ? "bg-primary text-white" : "bg-white"
             }`}
             onClick={() => updateFormData("gender", "other")}
           >
@@ -69,39 +63,40 @@ const PersonalInfoStep = ({ formData, updateFormData }: PersonalInfoStepProps) =
       </div>
 
       <div className="space-y-2">
-        <label className="text-sm font-medium">Disability Status (Optional)</label>
-        <div className="grid grid-cols-2 gap-3">
+        <label className="text-sm font-medium">Do you have any disability?</label>
+        <div className="grid grid-cols-2 gap-2">
           <button
             type="button"
-            className={`p-3 rounded-lg border text-center ${
-              formData.disability === "yes"
-                ? "border-primary bg-primary/10 text-primary"
-                : "border-border"
+            className={`py-2 px-4 rounded-lg border ${
+              formData.hasDisability === true ? "bg-primary text-white" : "bg-white"
             }`}
-            onClick={() => updateFormData("disability", "yes")}
+            onClick={() => updateFormData("hasDisability", true)}
           >
             Yes
           </button>
           <button
             type="button"
-            className={`p-3 rounded-lg border text-center ${
-              formData.disability === "no"
-                ? "border-primary bg-primary/10 text-primary"
-                : "border-border"
+            className={`py-2 px-4 rounded-lg border ${
+              formData.hasDisability === false ? "bg-primary text-white" : "bg-white"
             }`}
-            onClick={() => updateFormData("disability", "no")}
+            onClick={() => updateFormData("hasDisability", false)}
           >
             No
           </button>
         </div>
-        {formData.disability === "yes" && (
+        
+        {formData.hasDisability && (
           <div className="mt-2">
-            <input
-              type="text"
-              placeholder="Please specify (optional)"
+            <label htmlFor="disabilityDetails" className="text-sm font-medium">
+              Please specify (optional):
+            </label>
+            <textarea
+              id="disabilityDetails"
               value={formData.disabilityDetails || ""}
               onChange={(e) => updateFormData("disabilityDetails", e.target.value)}
-              className="input-field w-full"
+              className="input-field w-full mt-1"
+              rows={3}
+              placeholder="Provide details about your disability if you're comfortable sharing"
             />
           </div>
         )}

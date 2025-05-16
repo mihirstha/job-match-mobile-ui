@@ -22,7 +22,7 @@ const JobCard = ({
   return (
     <div 
       ref={cardRef}
-      className="absolute bg-white rounded-xl border border-border overflow-hidden shadow-lg w-full h-[500px]"
+      className="absolute bg-white rounded-xl border border-border overflow-hidden shadow-lg w-full h-[460px]"
       onTouchStart={onTouchStart}
       onTouchMove={onTouchMove}
       onTouchEnd={onTouchEnd}
@@ -41,7 +41,7 @@ const JobCard = ({
         </div>
       </div>
       
-      <div className="p-4 space-y-3">
+      <div className="p-4 space-y-3 pb-20">
         <div className="flex justify-between items-center">
           <div className="flex items-center space-x-2">
             <div className="flex items-center space-x-1">
