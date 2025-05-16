@@ -5,7 +5,7 @@ import { type JobListing } from "@/data/jobListings";
 
 interface UseJobSwipeProps {
   jobs: JobListing[];
-  onJobSelect: (job: JobListing) => void;
+  onJobSelect: (job: JobListing & { applicationIntent?: boolean }) => void;
 }
 
 const useJobSwipe = ({ jobs, onJobSelect }: UseJobSwipeProps) => {

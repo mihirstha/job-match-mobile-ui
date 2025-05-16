@@ -49,7 +49,7 @@ const JobDetails = ({ job, onClose }: JobDetailsProps) => {
 
   return (
     <div className="fixed inset-0 bg-black/50 z-50 flex items-end justify-center">
-      <div className="bg-white rounded-t-2xl w-full h-[90vh] overflow-auto animate-slide-in-bottom">
+      <div className="bg-white rounded-t-2xl w-full max-h-[90vh] overflow-auto animate-slide-in-bottom">
         {applicationStep === null && (
           <>
             <div className="sticky top-0 bg-white z-10">
@@ -178,7 +178,7 @@ const JobDetails = ({ job, onClose }: JobDetailsProps) => {
                 className="flex-1 py-3 bg-primary rounded-lg text-white font-medium flex items-center justify-center"
                 onClick={handleApply}
               >
-                <Star size={18} className="mr-1" title="Apply" />
+                <Star size={18} className="mr-1" aria-label="Apply" />
                 Apply
               </button>
             </div>
@@ -199,7 +199,7 @@ const JobDetails = ({ job, onClose }: JobDetailsProps) => {
               </div>
             </div>
             
-            <div className="p-5 pb-32 max-h-[90vh] overflow-y-auto">
+            <div className="p-5 pb-24">
               <div className="bg-gray-50 p-4 rounded-lg mb-6">
                 <h3 className="font-semibold text-lg mb-1">{job.title}</h3>
                 <p className="text-gray-600">{job.company} • {job.location}</p>
@@ -242,21 +242,22 @@ const JobDetails = ({ job, onClose }: JobDetailsProps) => {
               </div>
             </div>
             
-            <div className="fixed bottom-0 left-0 right-0 p-4 bg-white border-t">
+            <div className="sticky bottom-0 left-0 right-0 p-4 bg-white border-t">
+              <button 
+                className="w-full py-3 bg-primary rounded-lg text-white font-medium flex items-center justify-center"
+                onClick={handleConfirmApplication}
+              >
+                Confirm and Continue
+                <ArrowRight size={16} className="ml-1" />
+              </button>
+              
               {job.requiresVideoResume && (
-                <div className="p-4 bg-yellow-50 rounded-lg border border-yellow-200 mb-4">
+                <div className="p-4 bg-yellow-50 rounded-lg border border-yellow-200 mt-4">
                   <p className="text-sm text-yellow-800">
                     <span className="font-medium">Note:</span> This job requires a video resume. You'll be prompted to record or upload one after confirming.
                   </p>
                 </div>
               )}
-              <button 
-                className="w-full py-3 bg-primary rounded-lg text-white font-medium flex items-center justify-center"
-                onClick={handleConfirmApplication}
-              >
-                Continue
-                <ArrowRight size={16} className="ml-1" />
-              </button>
             </div>
           </>
         )}
@@ -275,7 +276,7 @@ const JobDetails = ({ job, onClose }: JobDetailsProps) => {
               </div>
             </div>
             
-            <div className="p-5 pb-32 max-h-[90vh] overflow-y-auto">
+            <div className="p-5 pb-32">
               <div className="space-y-6">
                 <div className="bg-primary/5 rounded-xl p-5 text-center space-y-4">
                   <div className="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center mx-auto">
@@ -315,7 +316,7 @@ const JobDetails = ({ job, onClose }: JobDetailsProps) => {
               </div>
             </div>
             
-            <div className="fixed bottom-0 left-0 right-0 p-4 bg-white border-t space-y-3">
+            <div className="sticky bottom-0 left-0 right-0 p-4 bg-white border-t space-y-3">
               <button 
                 className="w-full py-3 bg-primary rounded-lg text-white font-medium"
                 onClick={completeApplication}
