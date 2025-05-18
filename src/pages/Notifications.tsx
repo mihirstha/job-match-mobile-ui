@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import MobileNavbar from "@/components/MobileNavbar";
 import { BellOff, Check, Clock, Calendar, Briefcase, Bell } from "lucide-react";
 
@@ -30,6 +30,13 @@ const Notifications = () => {
       type: "reminder"
     }
   ]);
+  
+  const unreadCount = notifications.filter(n => !n.read).length;
+  
+  // Update localStorage with unread count for navbar to display
+  useEffect(() => {
+    localStorage.setItem('notificationCount', unreadCount.toString());
+  }, [unreadCount]);
   
   const markAsRead = (id) => {
     setNotifications(notifications.map(notification => 

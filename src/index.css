@@ -48,7 +48,7 @@
 
 @layer components {
   .mobile-container {
-    @apply max-w-md mx-auto min-h-screen flex flex-col bg-background;
+    @apply max-w-md mx-auto min-h-screen flex flex-col bg-background relative;
   }
   
   .mobile-page {

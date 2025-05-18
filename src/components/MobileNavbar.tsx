@@ -21,7 +21,7 @@ const MobileNavbar = ({ savedJobCount = 0 }: MobileNavbarProps) => {
   }, []);
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-border h-14 px-1 flex items-center justify-around z-30">
+    <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-border h-14 px-1 flex items-center justify-around z-30 max-w-md mx-auto">
       <Link
         to="/"
         className={`flex flex-col items-center justify-center w-1/4 py-1 ${
@@ -48,9 +48,9 @@ const MobileNavbar = ({ savedJobCount = 0 }: MobileNavbarProps) => {
       </Link>
 
       <Link
-        to="/jobs-applied"
-        className={`flex flex-col items-center justify-center w-1/4 py-1 ${
-          currentPath === "/jobs-applied" ? "text-primary" : "text-gray-500"
+        to="/notifications"
+        className={`flex flex-col items-center justify-center w-1/4 py-1 relative ${
+          currentPath === "/notifications" ? "text-primary" : "text-gray-500"
         }`}
       >
         <Bell size={20} />
@@ -59,7 +59,7 @@ const MobileNavbar = ({ savedJobCount = 0 }: MobileNavbarProps) => {
             {notificationCount}
           </span>
         )}
-        <span className="text-xs mt-0.5">Applied</span>
+        <span className="text-xs mt-0.5">Alerts</span>
       </Link>
 
       <Link
