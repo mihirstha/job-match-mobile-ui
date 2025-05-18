@@ -31,6 +31,7 @@ const Notifications = () => {
     }
   ]);
   
+  // Calculate unread notifications count
   const unreadCount = notifications.filter(n => !n.read).length;
   
   // Update localStorage with unread count for navbar to display
@@ -82,8 +83,6 @@ const Notifications = () => {
         );
     }
   };
-  
-  const unreadCount = notifications.filter(n => !n.read).length;
 
   return (
     <div className="mobile-container">
