@@ -1,7 +1,44 @@
+
 import { useState } from "react";
 import MobileNavbar from "@/components/MobileNavbar";
 import { useToast } from "@/hooks/use-toast";
 import { Camera, Video, Briefcase, GraduationCap, List, Edit, X, Check, Save, Plus } from "lucide-react";
+
+// Define the types for our data structures
+interface ExperienceItem {
+  id: number;
+  title: string;
+  company: string;
+  duration: string;
+  description: string;
+}
+
+interface EducationItem {
+  id: number;
+  degree: string;
+  institution: string;
+  year: string;
+}
+
+interface ProfileData {
+  name: string;
+  title: string;
+  email: string;
+  phone: string;
+  location: string;
+  about: string;
+  experience: ExperienceItem[];
+  skills: string[];
+  education: EducationItem[];
+  preferences: {
+    location: string;
+    jobTypes: string[];
+    industries: string[];
+    minSalary: string;
+    workEnvironment: string[];
+  };
+  videoResume: null | string;
+}
 
 const Profile = () => {
   const [activeTab, setActiveTab] = useState("profile");
@@ -9,10 +46,10 @@ const Profile = () => {
   
   // Edit states - properly typing editedContent
   const [editingSection, setEditingSection] = useState<string|null>(null);
-  const [editedContent, setEditedContent] = useState<Record<string, any>>({});
+  const [editedContent, setEditedContent] = useState<any>({}); // We'll type this contextually when using it
   
   // Mock profile data
-  const [profile, setProfile] = useState({
+  const [profile, setProfile] = useState<ProfileData>({
     name: "Aarav Sharma",
     title: "Senior Software Developer",
     email: "aarav.sharma@example.com",
@@ -66,8 +103,8 @@ const Profile = () => {
     setEditedContent([...profile.experience]);
   };
   
-  const handleUpdateExperienceField = (index, field, value) => {
-    const updatedExperience = [...editedContent];
+  const handleUpdateExperienceField = (index: number, field: string, value: string) => {
+    const updatedExperience = [...editedContent as ExperienceItem[]];
     updatedExperience[index] = {
       ...updatedExperience[index],
       [field]: value
@@ -76,18 +113,18 @@ const Profile = () => {
   };
   
   const handleAddExperience = () => {
-    const newExperience = {
+    const newExperience: ExperienceItem = {
       id: Date.now(), // Generate unique ID
       title: "",
       company: "",
       duration: "",
       description: ""
     };
-    setEditedContent([...editedContent, newExperience]);
+    setEditedContent([...editedContent as ExperienceItem[], newExperience]);
   };
   
-  const handleRemoveExperience = (index) => {
-    const updatedExperience = [...editedContent];
+  const handleRemoveExperience = (index: number) => {
+    const updatedExperience = [...editedContent as ExperienceItem[]];
     updatedExperience.splice(index, 1);
     setEditedContent(updatedExperience);
   };
@@ -95,7 +132,7 @@ const Profile = () => {
   const handleSaveExperience = () => {
     setProfile({
       ...profile,
-      experience: editedContent
+      experience: editedContent as ExperienceItem[]
     });
     setEditingSection(null);
     setEditedContent({});
@@ -112,25 +149,25 @@ const Profile = () => {
     setEditedContent([...profile.skills]);
   };
   
-  const handleUpdateSkill = (index, value) => {
-    const updatedSkills = [...editedContent];
+  const handleUpdateSkill = (index: number, value: string) => {
+    const updatedSkills = [...editedContent as string[]];
     updatedSkills[index] = value;
     setEditedContent(updatedSkills);
   };
   
   const handleAddSkill = () => {
-    setEditedContent([...editedContent, ""]);
+    setEditedContent([...editedContent as string[], ""]);
   };
   
-  const handleRemoveSkill = (index) => {
-    const updatedSkills = [...editedContent];
+  const handleRemoveSkill = (index: number) => {
+    const updatedSkills = [...editedContent as string[]];
     updatedSkills.splice(index, 1);
     setEditedContent(updatedSkills);
   };
   
   const handleSaveSkills = () => {
     // Filter out empty skills
-    const filteredSkills = editedContent.filter(skill => skill.trim() !== "");
+    const filteredSkills = (editedContent as string[]).filter(skill => skill.trim() !== "");
     
     setProfile({
       ...profile,
@@ -151,8 +188,8 @@ const Profile = () => {
     setEditedContent([...profile.education]);
   };
   
-  const handleUpdateEducationField = (index, field, value) => {
-    const updatedEducation = [...editedContent];
+  const handleUpdateEducationField = (index: number, field: string, value: string) => {
+    const updatedEducation = [...editedContent as EducationItem[]];
     updatedEducation[index] = {
       ...updatedEducation[index],
       [field]: value
@@ -161,17 +198,17 @@ const Profile = () => {
   };
   
   const handleAddEducation = () => {
-    const newEducation = {
+    const newEducation: EducationItem = {
       id: Date.now(), // Generate unique ID
       degree: "",
       institution: "",
       year: ""
     };
-    setEditedContent([...editedContent, newEducation]);
+    setEditedContent([...editedContent as EducationItem[], newEducation]);
   };
   
-  const handleRemoveEducation = (index) => {
-    const updatedEducation = [...editedContent];
+  const handleRemoveEducation = (index: number) => {
+    const updatedEducation = [...editedContent as EducationItem[]];
     updatedEducation.splice(index, 1);
     setEditedContent(updatedEducation);
   };
@@ -179,7 +216,7 @@ const Profile = () => {
   const handleSaveEducation = () => {
     setProfile({
       ...profile,
-      education: editedContent
+      education: editedContent as EducationItem[]
     });
     setEditingSection(null);
     setEditedContent({});
@@ -190,10 +227,10 @@ const Profile = () => {
     });
   };
   
-  const handleEditSection = (section) => {
+  const handleEditSection = (section: string) => {
     setEditingSection(section);
     setEditedContent({
-      ...profile[section]
+      ...profile[section as keyof ProfileData]
     });
   };
   
@@ -202,7 +239,7 @@ const Profile = () => {
     setEditedContent({});
   };
   
-  const handleSaveEdit = (section) => {
+  const handleSaveEdit = (section: string) => {
     setProfile({
       ...profile,
       [section]: editedContent
@@ -217,7 +254,7 @@ const Profile = () => {
     });
   };
   
-  const handleInputChange = (e) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setEditedContent({
       ...editedContent,
@@ -234,6 +271,64 @@ const Profile = () => {
 
   const [showPrivacySettings, setShowPrivacySettings] = useState(false);
   const [showNotificationSettings, setShowNotificationSettings] = useState(false);
+  
+  // Add missing handlers
+  const handleDeactivateAccount = () => {
+    toast({
+      title: "Account Deactivated",
+      description: "Your account has been temporarily deactivated.",
+      variant: "destructive"
+    });
+    setShowPrivacySettings(false);
+  };
+
+  const handleDeleteAccount = () => {
+    toast({
+      title: "Account Deleted",
+      description: "Your account and all data have been permanently deleted.",
+      variant: "destructive"
+    });
+    setShowPrivacySettings(false);
+  };
+
+  const handleUploadVideo = () => {
+    toast({
+      title: "Upload Started",
+      description: "Please select a video file to upload.",
+    });
+  };
+
+  const toggleWorkEnvironment = (env: string) => {
+    const currentEnv = [...profile.preferences.workEnvironment];
+    const index = currentEnv.indexOf(env);
+    
+    if (index === -1) {
+      currentEnv.push(env);
+    } else {
+      currentEnv.splice(index, 1);
+    }
+    
+    setProfile({
+      ...profile,
+      preferences: {
+        ...profile.preferences,
+        workEnvironment: currentEnv
+      }
+    });
+    
+    toast({
+      title: "Preference Updated",
+      description: `Work environment preference updated to ${currentEnv.join(', ')}.`,
+    });
+  };
+
+  const handleLogout = () => {
+    toast({
+      title: "Logged Out",
+      description: "You have been successfully logged out.",
+    });
+    // In a real app, we would clear session data and redirect
+  };
   
   // Privacy settings panel
   const renderPrivacySettings = () => {
