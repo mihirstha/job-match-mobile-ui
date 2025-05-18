@@ -1,120 +1,133 @@
 
-import { useRef, useState, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
-import { type JobListing } from "@/data/jobListings";
 
 interface UseJobSwipeProps {
-  jobs: JobListing[];
-  onJobSelect: (job: JobListing & { applicationIntent?: boolean }) => void;
+  jobs: any[];
+  onJobSelect: (job: any) => void;
+  onJobApply?: (jobId: any) => void;
 }
 
-const useJobSwipe = ({ jobs, onJobSelect }: UseJobSwipeProps) => {
+const useJobSwipe = ({ jobs, onJobSelect, onJobApply }: UseJobSwipeProps) => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const cardRef = useRef<HTMLDivElement>(null);
+  const [direction, setDirection] = useState<string | null>(null);
+  const [startX, setStartX] = useState(0);
+  const [startY, setStartY] = useState(0);
+  const [offsetX, setOffsetX] = useState(0);
+  const [offsetY, setOffsetY] = useState(0);
   const [savedJobCount, setSavedJobCount] = useState(0);
   const { toast } = useToast();
   
-  const handleTouchStart = useRef({ x: 0, y: 0 });
-  const handleTouchMove = useRef({ x: 0, y: 0 });
+  const cardRef = useRef<HTMLDivElement>(null);
   
-  // Load saved job count from localStorage on initial load
+  // Load saved jobs from localStorage on initialization
   useEffect(() => {
-    const savedCount = localStorage.getItem('savedJobCount');
-    if (savedCount) {
-      setSavedJobCount(parseInt(savedCount));
+    const savedJobsFromStorage = localStorage.getItem('savedJobs');
+    if (savedJobsFromStorage) {
+      const parsedSavedJobs = JSON.parse(savedJobsFromStorage);
+      setSavedJobCount(parsedSavedJobs.length);
     }
   }, []);
   
-  // Save count to localStorage whenever it changes
-  useEffect(() => {
-    localStorage.setItem('savedJobCount', savedJobCount.toString());
-  }, [savedJobCount]);
+  const onTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
+    setStartX(e.touches[0].clientX);
+    setStartY(e.touches[0].clientY);
+    setDirection(null);
+  };
   
-  const handleCardSwipe = (direction: "left" | "right" | "up") => {
-    if (currentIndex >= jobs.length) return;
+  const onTouchMove = (e: React.TouchEvent<HTMLDivElement>) => {
+    if (!cardRef.current) return;
     
-    const job = jobs[currentIndex];
+    const currentX = e.touches[0].clientX;
+    const currentY = e.touches[0].clientY;
     
-    if (direction === "right") {
-      toast({
-        title: "Job Saved",
-        description: `${job.title} at ${job.company} has been saved`,
-      });
-      
-      // Increment saved job count
-      setSavedJobCount(prevCount => prevCount + 1);
-      
-    } else if (direction === "left") {
-      toast({
-        title: "Job Rejected",
-        description: `${job.title} has been rejected`,
-      });
-    } else if (direction === "up") {
-      toast({
-        title: "Application Initiated",
-        description: `Starting application for ${job.title} at ${job.company}`,
-      });
-      
-      onJobSelect({...job, applicationIntent: true});
-      return; // Don't move to next card yet since we're starting application flow
+    const deltaX = currentX - startX;
+    const deltaY = currentY - startY;
+    
+    const absDeltaX = Math.abs(deltaX);
+    const absDeltaY = Math.abs(deltaY);
+    
+    // Determine swipe direction
+    if (absDeltaX > 10 || absDeltaY > 10) {
+      if (absDeltaX > absDeltaY) {
+        setDirection(deltaX > 0 ? 'right' : 'left');
+      } else {
+        setDirection(deltaY < 0 ? 'up' : 'down');
+      }
     }
-
-    // Move to next card
-    setCurrentIndex(currentIndex + 1);
-  };
-  
-  const onTouchStart = (e: React.TouchEvent) => {
-    handleTouchStart.current = { 
-      x: e.touches[0].clientX, 
-      y: e.touches[0].clientY 
-    };
-  };
-  
-  const onTouchMove = (e: React.TouchEvent) => {
-    handleTouchMove.current = { 
-      x: e.touches[0].clientX, 
-      y: e.touches[0].clientY 
-    };
     
-    if (cardRef.current) {
-      const deltaX = handleTouchMove.current.x - handleTouchStart.current.x;
-      const deltaY = handleTouchMove.current.y - handleTouchStart.current.y;
+    if (direction === 'left' || direction === 'right') {
+      setOffsetX(deltaX * 0.5);
+      setOffsetY(0);
+    } else if (direction === 'up') {
+      setOffsetY(deltaY * 0.5);
+      setOffsetX(0);
+    }
+    
+    if (direction) {
+      cardRef.current.style.transform = `translate(${offsetX}px, ${offsetY}px) rotate(${offsetX * 0.03}deg)`;
       
-      cardRef.current.style.transform = `translate(${deltaX}px, ${deltaY}px) rotate(${deltaX * 0.1}deg)`;
+      if (direction === 'right') {
+        cardRef.current.style.boxShadow = '0 0 10px rgba(52, 211, 153, 0.7)';
+      } else if (direction === 'left') {
+        cardRef.current.style.boxShadow = '0 0 10px rgba(239, 68, 68, 0.7)';
+      } else if (direction === 'up') {
+        cardRef.current.style.boxShadow = '0 0 10px rgba(59, 130, 246, 0.7)';
+      }
     }
   };
   
   const onTouchEnd = () => {
     if (!cardRef.current) return;
     
-    const deltaX = handleTouchMove.current.x - handleTouchStart.current.x;
-    const deltaY = handleTouchMove.current.y - handleTouchStart.current.y;
+    // Reset card position and style
+    cardRef.current.style.transition = 'transform 0.3s ease';
+    cardRef.current.style.transform = 'translate(0px, 0px)';
+    cardRef.current.style.boxShadow = '';
     
-    cardRef.current.style.transition = 'transform 0.5s ease';
+    // Check if the swipe was strong enough to trigger an action
+    const swipeThreshold = 100;
     
-    if (deltaX > 100) {
-      // Right swipe
-      cardRef.current.style.transform = 'translateX(1000px) rotate(30deg)';
-      handleCardSwipe("right");
-    } else if (deltaX < -100) {
-      // Left swipe
-      cardRef.current.style.transform = 'translateX(-1000px) rotate(-30deg)';
-      handleCardSwipe("left");
-    } else if (deltaY < -100) {
-      // Up swipe
-      cardRef.current.style.transform = 'translateY(-1000px)';
-      handleCardSwipe("up");
-    } else {
-      // Reset position
-      cardRef.current.style.transform = 'translate(0px, 0px) rotate(0deg)';
+    if (Math.abs(offsetX) > swipeThreshold || Math.abs(offsetY) > swipeThreshold) {
+      handleCardSwipe(direction);
     }
     
+    // Reset offsets
     setTimeout(() => {
-      if (cardRef.current) {
-        cardRef.current.style.transition = '';
-        cardRef.current.style.transform = 'translate(0px, 0px) rotate(0deg)';
+      setOffsetX(0);
+      setOffsetY(0);
+      cardRef.current.style.transition = '';
+    }, 300);
+  };
+  
+  const handleCardSwipe = (direction: string) => {
+    if (!direction || currentIndex >= jobs.length) return;
+    
+    const currentJob = jobs[currentIndex];
+    
+    if (direction === 'right') {
+      // Save job
+      const savedJobs = JSON.parse(localStorage.getItem('savedJobs') || '[]');
+      
+      if (!savedJobs.includes(currentJob.id)) {
+        savedJobs.push(currentJob.id);
+        localStorage.setItem('savedJobs', JSON.stringify(savedJobs));
+        setSavedJobCount(savedJobs.length);
+        
+        toast({
+          title: "Job Saved",
+          description: "This job has been added to your saved list.",
+        });
       }
-    }, 500);
+    } else if (direction === 'up') {
+      // Apply for job
+      if (onJobApply) {
+        onJobApply(currentJob.id);
+      }
+    }
+    
+    // Move to the next card
+    setCurrentIndex(currentIndex + 1);
   };
   
   return {

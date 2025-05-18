@@ -4,32 +4,45 @@ import MobileNavbar from "@/components/MobileNavbar";
 import { BellOff, Check, Clock, Calendar, Briefcase, Bell } from "lucide-react";
 
 const Notifications = () => {
-  const [notifications, setNotifications] = useState([
-    {
-      id: 2,
-      title: "Application Viewed",
-      message: "DesignStudio Nepal viewed your application for the UX/UI Designer position.",
-      time: "Yesterday",
-      read: true,
-      type: "application"
-    },
-    {
-      id: 3,
-      title: "New Job Match",
-      message: "We found 3 new jobs matching your profile and preferences.",
-      time: "2 days ago",
-      read: false,
-      type: "match"
-    },
-    {
-      id: 4,
-      title: "Video Resume Reminder",
-      message: "Complete your video resume to increase your chances of getting noticed by employers.",
-      time: "3 days ago",
-      read: true,
-      type: "reminder"
+  const [notifications, setNotifications] = useState([]);
+  
+  // Load notifications from localStorage on component mount
+  useEffect(() => {
+    const storedNotifications = localStorage.getItem('notifications');
+    if (storedNotifications) {
+      setNotifications(JSON.parse(storedNotifications));
+    } else {
+      // Default notifications if none exist
+      const defaultNotifications = [
+        {
+          id: 2,
+          title: "Application Viewed",
+          message: "DesignStudio Nepal viewed your application for the UX/UI Designer position.",
+          time: "Yesterday",
+          read: true,
+          type: "application"
+        },
+        {
+          id: 3,
+          title: "New Job Match",
+          message: "We found 3 new jobs matching your profile and preferences.",
+          time: "2 days ago",
+          read: false,
+          type: "match"
+        },
+        {
+          id: 4,
+          title: "Video Resume Reminder",
+          message: "Complete your video resume to increase your chances of getting noticed by employers.",
+          time: "3 days ago",
+          read: true,
+          type: "reminder"
+        }
+      ];
+      setNotifications(defaultNotifications);
+      localStorage.setItem('notifications', JSON.stringify(defaultNotifications));
     }
-  ]);
+  }, []);
   
   // Calculate unread notifications count
   const unreadCount = notifications.filter(n => !n.read).length;
@@ -40,13 +53,17 @@ const Notifications = () => {
   }, [unreadCount]);
   
   const markAsRead = (id) => {
-    setNotifications(notifications.map(notification => 
+    const updatedNotifications = notifications.map(notification => 
       notification.id === id ? {...notification, read: true} : notification
-    ));
+    );
+    setNotifications(updatedNotifications);
+    localStorage.setItem('notifications', JSON.stringify(updatedNotifications));
   };
   
   const markAllAsRead = () => {
-    setNotifications(notifications.map(notification => ({...notification, read: true})));
+    const updatedNotifications = notifications.map(notification => ({...notification, read: true}));
+    setNotifications(updatedNotifications);
+    localStorage.setItem('notifications', JSON.stringify(updatedNotifications));
   };
   
   const getNotificationIcon = (type) => {
@@ -106,7 +123,7 @@ const Notifications = () => {
           </div>
           
           {notifications.length > 0 ? (
-            <div className="space-y-4">
+            <div className="space-y-4 pb-16">
               {notifications.map((notification) => (
                 <div 
                   key={notification.id} 

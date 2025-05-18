@@ -1,13 +1,13 @@
 import { useState } from "react";
 import MobileNavbar from "@/components/MobileNavbar";
 import { useToast } from "@/hooks/use-toast";
-import { Camera, Video, Briefcase, GraduationCap, List, Edit, X, Check, Save } from "lucide-react";
+import { Camera, Video, Briefcase, GraduationCap, List, Edit, X, Check, Save, Plus } from "lucide-react";
 
 const Profile = () => {
   const [activeTab, setActiveTab] = useState("profile");
   const { toast } = useToast();
   
-  // Edit states - fixing the type error by properly typing editedContent
+  // Edit states - properly typing editedContent
   const [editingSection, setEditingSection] = useState<string|null>(null);
   const [editedContent, setEditedContent] = useState<Record<string, any>>({});
   
@@ -60,6 +60,136 @@ const Profile = () => {
     videoResume: null
   });
   
+  // Experience editing
+  const handleEditExperience = () => {
+    setEditingSection('experience');
+    setEditedContent([...profile.experience]);
+  };
+  
+  const handleUpdateExperienceField = (index, field, value) => {
+    const updatedExperience = [...editedContent];
+    updatedExperience[index] = {
+      ...updatedExperience[index],
+      [field]: value
+    };
+    setEditedContent(updatedExperience);
+  };
+  
+  const handleAddExperience = () => {
+    const newExperience = {
+      id: Date.now(), // Generate unique ID
+      title: "",
+      company: "",
+      duration: "",
+      description: ""
+    };
+    setEditedContent([...editedContent, newExperience]);
+  };
+  
+  const handleRemoveExperience = (index) => {
+    const updatedExperience = [...editedContent];
+    updatedExperience.splice(index, 1);
+    setEditedContent(updatedExperience);
+  };
+  
+  const handleSaveExperience = () => {
+    setProfile({
+      ...profile,
+      experience: editedContent
+    });
+    setEditingSection(null);
+    setEditedContent({});
+    
+    toast({
+      title: "Changes Saved",
+      description: "Your experience information has been updated.",
+    });
+  };
+  
+  // Skills editing
+  const handleEditSkills = () => {
+    setEditingSection('skills');
+    setEditedContent([...profile.skills]);
+  };
+  
+  const handleUpdateSkill = (index, value) => {
+    const updatedSkills = [...editedContent];
+    updatedSkills[index] = value;
+    setEditedContent(updatedSkills);
+  };
+  
+  const handleAddSkill = () => {
+    setEditedContent([...editedContent, ""]);
+  };
+  
+  const handleRemoveSkill = (index) => {
+    const updatedSkills = [...editedContent];
+    updatedSkills.splice(index, 1);
+    setEditedContent(updatedSkills);
+  };
+  
+  const handleSaveSkills = () => {
+    // Filter out empty skills
+    const filteredSkills = editedContent.filter(skill => skill.trim() !== "");
+    
+    setProfile({
+      ...profile,
+      skills: filteredSkills
+    });
+    setEditingSection(null);
+    setEditedContent({});
+    
+    toast({
+      title: "Changes Saved",
+      description: "Your skills have been updated.",
+    });
+  };
+  
+  // Education editing
+  const handleEditEducation = () => {
+    setEditingSection('education');
+    setEditedContent([...profile.education]);
+  };
+  
+  const handleUpdateEducationField = (index, field, value) => {
+    const updatedEducation = [...editedContent];
+    updatedEducation[index] = {
+      ...updatedEducation[index],
+      [field]: value
+    };
+    setEditedContent(updatedEducation);
+  };
+  
+  const handleAddEducation = () => {
+    const newEducation = {
+      id: Date.now(), // Generate unique ID
+      degree: "",
+      institution: "",
+      year: ""
+    };
+    setEditedContent([...editedContent, newEducation]);
+  };
+  
+  const handleRemoveEducation = (index) => {
+    const updatedEducation = [...editedContent];
+    updatedEducation.splice(index, 1);
+    setEditedContent(updatedEducation);
+  };
+  
+  const handleSaveEducation = () => {
+    setProfile({
+      ...profile,
+      education: editedContent
+    });
+    setEditingSection(null);
+    setEditedContent({});
+    
+    toast({
+      title: "Changes Saved",
+      description: "Your education information has been updated.",
+    });
+  };
+  
   const handleEditSection = (section) => {
     setEditingSection(section);
     setEditedContent({
@@ -95,66 +225,6 @@ const Profile = () => {
     });
   };
   
-  const handleUploadVideo = () => {
-    toast({
-      title: "Video Upload",
-      description: "Video resume upload functionality would be implemented here",
-    });
-  };
-  
-  const handleLogout = () => {
-    toast({
-      title: "Logged out",
-      description: "You have been successfully logged out.",
-    });
-    
-    setTimeout(() => {
-      window.location.href = "/login";
-    }, 1500);
-  };
-  
-  const handleDeactivateAccount = () => {
-    toast({
-      title: "Account Deactivation",
-      description: "Your account will be deactivated. You can reactivate it by logging in again.",
-    });
-  };
-  
-  const handleDeleteAccount = () => {
-    toast({
-      title: "Account Deletion",
-      description: "Your account has been scheduled for deletion. This cannot be undone.",
-      variant: "destructive",
-    });
-  };
-
-  // Function to handle work environment selection
-  const toggleWorkEnvironment = (env) => {
-    const currentEnvironments = [...profile.preferences.workEnvironment];
-    
-    if (currentEnvironments.includes(env)) {
-      // Remove if already selected
-      const updatedEnvironments = currentEnvironments.filter(item => item !== env);
-      setProfile({
-        ...profile,
-        preferences: {
-          ...profile.preferences,
-          workEnvironment: updatedEnvironments
-        }
-      });
-    } else {
-      // Add if not selected
-      setProfile({
-        ...profile,
-        preferences: {
-          ...profile.preferences,
-          workEnvironment: [...currentEnvironments, env]
-        }
-      });
-    }
-  };
-
-  // Handle profile photo change
   const handlePhotoChange = () => {
     toast({
       title: "Photo Update",
@@ -346,7 +416,7 @@ const Profile = () => {
           </div>
 
           {activeTab === "profile" && (
-            <div className="space-y-6">
+            <div className="space-y-6 pb-16">
               <div>
                 <div className="flex items-center justify-between mb-2">
                   <h2 className="text-lg font-semibold">About</h2>
@@ -394,22 +464,103 @@ const Profile = () => {
                     <Briefcase size={18} className="mr-2" />
                     Experience
                   </h2>
-                  <button 
-                    className="text-primary text-sm flex items-center"
-                    onClick={() => handleEditSection('experience')}
-                  >
-                    <Edit size={14} className="mr-1" /> Edit
-                  </button>
+                  {editingSection !== 'experience' && (
+                    <button 
+                      className="text-primary text-sm flex items-center"
+                      onClick={handleEditExperience}
+                    >
+                      <Edit size={14} className="mr-1" /> Edit
+                    </button>
+                  )}
                 </div>
-                <div className="space-y-4">
-                  {profile.experience.map((exp) => (
-                    <div key={exp.id} className="border-l-2 border-primary/30 pl-4">
-                      <h3 className="font-medium">{exp.title}</h3>
-                      <p className="text-sm text-muted-foreground">{exp.company} • {exp.duration}</p>
-                      <p className="text-sm mt-1">{exp.description}</p>
+                
+                {editingSection === 'experience' ? (
+                  <div className="space-y-4">
+                    {editedContent.map((exp, index) => (
+                      <div key={exp.id || index} className="border border-border rounded-lg p-4 space-y-3">
+                        <div className="flex justify-between">
+                          <h3 className="font-medium">Experience {index + 1}</h3>
+                          <button 
+                            className="text-red-500"
+                            onClick={() => handleRemoveExperience(index)}
+                          >
+                            <X size={16} />
+                          </button>
+                        </div>
+                        <div className="space-y-3">
+                          <div>
+                            <label className="text-sm font-medium">Job Title</label>
+                            <input
+                              type="text"
+                              value={exp.title}
+                              onChange={(e) => handleUpdateExperienceField(index, 'title', e.target.value)}
+                              className="w-full border border-border rounded-lg p-2 mt-1"
+                            />
+                          </div>
+                          <div>
+                            <label className="text-sm font-medium">Company</label>
+                            <input
+                              type="text"
+                              value={exp.company}
+                              onChange={(e) => handleUpdateExperienceField(index, 'company', e.target.value)}
+                              className="w-full border border-border rounded-lg p-2 mt-1"
+                            />
+                          </div>
+                          <div>
+                            <label className="text-sm font-medium">Duration</label>
+                            <input
+                              type="text"
+                              value={exp.duration}
+                              onChange={(e) => handleUpdateExperienceField(index, 'duration', e.target.value)}
+                              className="w-full border border-border rounded-lg p-2 mt-1"
+                              placeholder="e.g. 2019 - 2023"
+                            />
+                          </div>
+                          <div>
+                            <label className="text-sm font-medium">Description</label>
+                            <textarea
+                              value={exp.description}
+                              onChange={(e) => handleUpdateExperienceField(index, 'description', e.target.value)}
+                              className="w-full border border-border rounded-lg p-2 mt-1 min-h-[80px]"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                    <div className="flex justify-between">
+                      <button 
+                        className="flex items-center text-primary font-medium"
+                        onClick={handleAddExperience}
+                      >
+                        <Plus size={16} className="mr-1" /> Add Experience
+                      </button>
+                      <div className="flex gap-2">
+                        <button 
+                          className="px-3 py-2 border border-border rounded-lg"
+                          onClick={handleCancelEdit}
+                        >
+                          Cancel
+                        </button>
+                        <button 
+                          className="px-3 py-2 bg-primary text-white rounded-lg"
+                          onClick={handleSaveExperience}
+                        >
+                          Save
+                        </button>
+                      </div>
                     </div>
-                  ))}
-                </div>
+                  </div>
+                ) : (
+                  <div className="space-y-4">
+                    {profile.experience.map((exp) => (
+                      <div key={exp.id} className="border-l-2 border-primary/30 pl-4">
+                        <h3 className="font-medium">{exp.title}</h3>
+                        <p className="text-sm text-muted-foreground">{exp.company} • {exp.duration}</p>
+                        <p className="text-sm mt-1">{exp.description}</p>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
 
               <div>
@@ -418,23 +569,71 @@ const Profile = () => {
                     <List size={18} className="mr-2" />
                     Skills
                   </h2>
-                  <button 
-                    className="text-primary text-sm flex items-center"
-                    onClick={() => handleEditSection('skills')}
-                  >
-                    <Edit size={14} className="mr-1" /> Edit
-                  </button>
-                </div>
-                <div className="flex flex-wrap gap-2">
-                  {profile.skills.map((skill) => (
-                    <span 
-                      key={skill} 
-                      className="bg-primary/10 text-primary text-sm px-3 py-1 rounded-full"
+                  {editingSection !== 'skills' && (
+                    <button 
+                      className="text-primary text-sm flex items-center"
+                      onClick={handleEditSkills}
                     >
-                      {skill}
-                    </span>
-                  ))}
+                      <Edit size={14} className="mr-1" /> Edit
+                    </button>
+                  )}
                 </div>
+                
+                {editingSection === 'skills' ? (
+                  <div className="space-y-3">
+                    <div className="border border-border rounded-lg p-3">
+                      <div className="flex flex-wrap gap-2 mb-4">
+                        {editedContent.map((skill, index) => (
+                          <div key={index} className="bg-primary/10 text-primary text-sm px-3 py-1 rounded-full flex items-center">
+                            <input
+                              type="text"
+                              value={skill}
+                              onChange={(e) => handleUpdateSkill(index, e.target.value)}
+                              className="bg-transparent border-none outline-none w-full max-w-[100px]"
+                            />
+                            <button 
+                              className="ml-1"
+                              onClick={() => handleRemoveSkill(index)}
+                            >
+                              <X size={14} />
+                            </button>
+                          </div>
+                        ))}
+                        <button 
+                          className="bg-gray-100 text-gray-600 text-sm px-3 py-1 rounded-full flex items-center"
+                          onClick={handleAddSkill}
+                        >
+                          <Plus size={14} className="mr-1" /> Add
+                        </button>
+                      </div>
+                    </div>
+                    <div className="flex justify-end gap-2">
+                      <button 
+                        className="px-3 py-2 border border-border rounded-lg"
+                        onClick={handleCancelEdit}
+                      >
+                        Cancel
+                      </button>
+                      <button 
+                        className="px-3 py-2 bg-primary text-white rounded-lg"
+                        onClick={handleSaveSkills}
+                      >
+                        Save
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="flex flex-wrap gap-2">
+                    {profile.skills.map((skill) => (
+                      <span 
+                        key={skill} 
+                        className="bg-primary/10 text-primary text-sm px-3 py-1 rounded-full"
+                      >
+                        {skill}
+                      </span>
+                    ))}
+                  </div>
+                )}
               </div>
 
               <div>
@@ -443,21 +642,93 @@ const Profile = () => {
                     <GraduationCap size={18} className="mr-2" />
                     Education
                   </h2>
-                  <button 
-                    className="text-primary text-sm flex items-center"
-                    onClick={() => handleEditSection('education')}
-                  >
-                    <Edit size={14} className="mr-1" /> Edit
-                  </button>
+                  {editingSection !== 'education' && (
+                    <button 
+                      className="text-primary text-sm flex items-center"
+                      onClick={handleEditEducation}
+                    >
+                      <Edit size={14} className="mr-1" /> Edit
+                    </button>
+                  )}
                 </div>
-                <div className="space-y-4">
-                  {profile.education.map((edu) => (
-                    <div key={edu.id}>
-                      <h3 className="font-medium">{edu.degree}</h3>
-                      <p className="text-sm text-muted-foreground">{edu.institution} • {edu.year}</p>
+                
+                {editingSection === 'education' ? (
+                  <div className="space-y-4">
+                    {editedContent.map((edu, index) => (
+                      <div key={edu.id || index} className="border border-border rounded-lg p-4 space-y-3">
+                        <div className="flex justify-between">
+                          <h3 className="font-medium">Education {index + 1}</h3>
+                          <button 
+                            className="text-red-500"
+                            onClick={() => handleRemoveEducation(index)}
+                          >
+                            <X size={16} />
+                          </button>
+                        </div>
+                        <div className="space-y-3">
+                          <div>
+                            <label className="text-sm font-medium">Degree</label>
+                            <input
+                              type="text"
+                              value={edu.degree}
+                              onChange={(e) => handleUpdateEducationField(index, 'degree', e.target.value)}
+                              className="w-full border border-border rounded-lg p-2 mt-1"
+                            />
+                          </div>
+                          <div>
+                            <label className="text-sm font-medium">Institution</label>
+                            <input
+                              type="text"
+                              value={edu.institution}
+                              onChange={(e) => handleUpdateEducationField(index, 'institution', e.target.value)}
+                              className="w-full border border-border rounded-lg p-2 mt-1"
+                            />
+                          </div>
+                          <div>
+                            <label className="text-sm font-medium">Year</label>
+                            <input
+                              type="text"
+                              value={edu.year}
+                              onChange={(e) => handleUpdateEducationField(index, 'year', e.target.value)}
+                              className="w-full border border-border rounded-lg p-2 mt-1"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                    <div className="flex justify-between">
+                      <button 
+                        className="flex items-center text-primary font-medium"
+                        onClick={handleAddEducation}
+                      >
+                        <Plus size={16} className="mr-1" /> Add Education
+                      </button>
+                      <div className="flex gap-2">
+                        <button 
+                          className="px-3 py-2 border border-border rounded-lg"
+                          onClick={handleCancelEdit}
+                        >
+                          Cancel
+                        </button>
+                        <button 
+                          className="px-3 py-2 bg-primary text-white rounded-lg"
+                          onClick={handleSaveEducation}
+                        >
+                          Save
+                        </button>
+                      </div>
                     </div>
-                  ))}
-                </div>
+                  </div>
+                ) : (
+                  <div className="space-y-4">
+                    {profile.education.map((edu) => (
+                      <div key={edu.id}>
+                        <h3 className="font-medium">{edu.degree}</h3>
+                        <p className="text-sm text-muted-foreground">{edu.institution} • {edu.year}</p>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
 
               <button className="btn-outline w-full">

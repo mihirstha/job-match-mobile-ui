@@ -9,18 +9,69 @@ import JobCard from "@/components/home/JobCard";
 import JobActions from "@/components/home/JobActions";
 import NoMoreJobs from "@/components/home/NoMoreJobs";
 import useJobSwipe from "@/hooks/useJobSwipe";
+import { useToast } from "@/hooks/use-toast";
 
 const Home = () => {
   const [showDetails, setShowDetails] = useState(false);
   const [selectedJob, setSelectedJob] = useState(null);
   const [showFilter, setShowFilter] = useState(false);
   const [savedJobs, setSavedJobs] = useState([]);
+  const [appliedJobs, setAppliedJobs] = useState([]);
+  const { toast } = useToast();
   
   const filteredJobs = jobListings;
+  
+  // Load saved and applied job counts from localStorage on component mount
+  useEffect(() => {
+    const savedJobsData = localStorage.getItem('savedJobs');
+    const appliedJobsData = localStorage.getItem('appliedJobs');
+    
+    if (savedJobsData) {
+      setSavedJobs(JSON.parse(savedJobsData));
+    }
+    
+    if (appliedJobsData) {
+      setAppliedJobs(JSON.parse(appliedJobsData));
+    }
+  }, []);
   
   const handleJobSelect = (job) => {
     setSelectedJob(job);
     setShowDetails(true);
+  };
+  
+  const handleJobApply = (jobId) => {
+    if (!appliedJobs.includes(jobId)) {
+      const updatedAppliedJobs = [...appliedJobs, jobId];
+      setAppliedJobs(updatedAppliedJobs);
+      localStorage.setItem('appliedJobs', JSON.stringify(updatedAppliedJobs));
+      
+      // Create a notification for the job application
+      addNotification({
+        id: Date.now(),
+        title: "Application Submitted",
+        message: `Your application for ${filteredJobs.find(job => job.id === jobId)?.title} has been submitted successfully.`,
+        time: "Just now",
+        read: false,
+        type: "application"
+      });
+      
+      toast({
+        title: "Application Submitted",
+        description: "Your application has been submitted successfully.",
+      });
+    }
+  };
+  
+  // Function to add a new notification
+  const addNotification = (notification) => {
+    const existingNotifications = JSON.parse(localStorage.getItem('notifications') || '[]');
+    const updatedNotifications = [notification, ...existingNotifications];
+    localStorage.setItem('notifications', JSON.stringify(updatedNotifications));
+    
+    // Update notification count
+    const unreadCount = updatedNotifications.filter(n => !n.read).length;
+    localStorage.setItem('notificationCount', unreadCount.toString());
   };
   
   const { 
@@ -35,7 +86,8 @@ const Home = () => {
     setSavedJobCount
   } = useJobSwipe({
     jobs: filteredJobs,
-    onJobSelect: handleJobSelect
+    onJobSelect: handleJobSelect,
+    onJobApply: handleJobApply
   });
   
   const handleViewDetails = () => {
@@ -87,7 +139,10 @@ const Home = () => {
         <JobFilter onClose={() => setShowFilter(false)} />
       )}
       
-      <MobileNavbar savedJobCount={savedJobCount} />
+      <MobileNavbar 
+        savedJobCount={savedJobCount} 
+        appliedJobCount={appliedJobs.length} 
+      />
     </div>
   );
 };
