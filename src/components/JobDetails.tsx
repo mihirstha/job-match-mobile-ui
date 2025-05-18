@@ -234,16 +234,25 @@ const JobDetails = ({ job, onClose }: JobDetailsProps) => {
                         <span className="bg-primary/10 text-primary text-xs px-2 py-1 rounded-full">Node.js</span>
                       </div>
                     </div>
-                    <div>
+                    <div className="pb-4">
                       <p className="text-gray-500 text-sm">Education</p>
                       <p className="font-medium">Master of Computer Science, Kathmandu University</p>
                     </div>
+                    
+                    {/* Video Resume Note moved here */}
+                    {job.requiresVideoResume && (
+                      <div className="p-3 bg-yellow-50 rounded-lg border border-yellow-200 mb-6">
+                        <p className="text-sm text-yellow-800">
+                          <span className="font-medium">Note:</span> This job requires a video resume. You'll be prompted to record or upload one after confirming.
+                        </p>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
             </div>
             
-            <div className="sticky bottom-0 left-0 right-0 p-4 bg-white border-t flex flex-col space-y-4">
+            <div className="sticky bottom-0 left-0 right-0 p-4 bg-white border-t">
               <button 
                 className="w-full py-3 bg-primary rounded-lg text-white font-medium flex items-center justify-center"
                 onClick={handleConfirmApplication}
@@ -251,14 +260,6 @@ const JobDetails = ({ job, onClose }: JobDetailsProps) => {
                 Confirm and Continue
                 <ArrowRight size={16} className="ml-1" />
               </button>
-              
-              {job.requiresVideoResume && (
-                <div className="p-3 bg-yellow-50 rounded-lg border border-yellow-200">
-                  <p className="text-sm text-yellow-800">
-                    <span className="font-medium">Note:</span> This job requires a video resume. You'll be prompted to record or upload one after confirming.
-                  </p>
-                </div>
-              )}
             </div>
           </>
         )}

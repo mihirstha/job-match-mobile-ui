@@ -1,5 +1,5 @@
 
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { type JobListing } from "@/data/jobListings";
 
@@ -11,10 +11,24 @@ interface UseJobSwipeProps {
 const useJobSwipe = ({ jobs, onJobSelect }: UseJobSwipeProps) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const cardRef = useRef<HTMLDivElement>(null);
+  const [savedJobCount, setSavedJobCount] = useState(0);
   const { toast } = useToast();
   
   const handleTouchStart = useRef({ x: 0, y: 0 });
   const handleTouchMove = useRef({ x: 0, y: 0 });
+  
+  // Load saved job count from localStorage on initial load
+  useEffect(() => {
+    const savedCount = localStorage.getItem('savedJobCount');
+    if (savedCount) {
+      setSavedJobCount(parseInt(savedCount));
+    }
+  }, []);
+  
+  // Save count to localStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem('savedJobCount', savedJobCount.toString());
+  }, [savedJobCount]);
   
   const handleCardSwipe = (direction: "left" | "right" | "up") => {
     if (currentIndex >= jobs.length) return;
@@ -26,6 +40,10 @@ const useJobSwipe = ({ jobs, onJobSelect }: UseJobSwipeProps) => {
         title: "Job Saved",
         description: `${job.title} at ${job.company} has been saved`,
       });
+      
+      // Increment saved job count
+      setSavedJobCount(prevCount => prevCount + 1);
+      
     } else if (direction === "left") {
       toast({
         title: "Job Rejected",
@@ -106,7 +124,9 @@ const useJobSwipe = ({ jobs, onJobSelect }: UseJobSwipeProps) => {
     handleCardSwipe,
     onTouchStart,
     onTouchMove,
-    onTouchEnd
+    onTouchEnd,
+    savedJobCount,
+    setSavedJobCount
   };
 };
 

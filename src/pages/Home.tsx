@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import MobileNavbar from "@/components/MobileNavbar";
 import JobDetails from "@/components/JobDetails";
 import JobFilter from "@/components/JobFilter";
@@ -14,6 +14,7 @@ const Home = () => {
   const [showDetails, setShowDetails] = useState(false);
   const [selectedJob, setSelectedJob] = useState(null);
   const [showFilter, setShowFilter] = useState(false);
+  const [savedJobs, setSavedJobs] = useState([]);
   
   const filteredJobs = jobListings;
   
@@ -29,11 +30,19 @@ const Home = () => {
     handleCardSwipe,
     onTouchStart,
     onTouchMove,
-    onTouchEnd
+    onTouchEnd,
+    savedJobCount,
+    setSavedJobCount
   } = useJobSwipe({
     jobs: filteredJobs,
     onJobSelect: handleJobSelect
   });
+  
+  const handleViewDetails = () => {
+    if (currentIndex < filteredJobs.length) {
+      handleJobSelect(filteredJobs[currentIndex]);
+    }
+  };
   
   const handleCardClick = (job) => {
     setSelectedJob(job);
@@ -43,11 +52,11 @@ const Home = () => {
   return (
     <div className="mobile-container">
       <div className="mobile-page">
-        <div className="space-y-4">
+        <div className="space-y-3">
           <Header onFilterClick={() => setShowFilter(true)} />
 
           {currentIndex < filteredJobs.length ? (
-            <div className="h-[520px] relative flex items-center justify-center">
+            <div className="h-[520px] max-h-[calc(100vh-200px)] relative flex items-center justify-center">
               <JobCard 
                 job={filteredJobs[currentIndex]}
                 cardRef={cardRef}
@@ -61,6 +70,7 @@ const Home = () => {
                 onReject={() => handleCardSwipe("left")}
                 onApply={() => handleCardSwipe("up")}
                 onSave={() => handleCardSwipe("right")}
+                onDetails={handleViewDetails}
               />
             </div>
           ) : (
@@ -77,7 +87,7 @@ const Home = () => {
         <JobFilter onClose={() => setShowFilter(false)} />
       )}
       
-      <MobileNavbar />
+      <MobileNavbar savedJobCount={savedJobCount} />
     </div>
   );
 };

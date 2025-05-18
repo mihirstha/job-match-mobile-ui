@@ -1,55 +1,61 @@
 
-import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Home, Bookmark, Bell, FileText, User } from "lucide-react";
+import { Home, Briefcase, Bell, User } from "lucide-react";
 
-const MobileNavbar = () => {
+interface MobileNavbarProps {
+  savedJobCount?: number;
+}
+
+const MobileNavbar = ({ savedJobCount = 0 }: MobileNavbarProps) => {
   const location = useLocation();
-  const [activeTab, setActiveTab] = useState(location.pathname);
-
-  const navItems = [
-    {
-      name: "Home",
-      path: "/",
-      icon: <Home size={22} />,
-    },
-    {
-      name: "Saved",
-      path: "/saved-jobs",
-      icon: <Bookmark size={22} />,
-    },
-    {
-      name: "Applied",
-      path: "/jobs-applied",
-      icon: <FileText size={22} />,
-    },
-    {
-      name: "Notifications",
-      path: "/notifications",
-      icon: <Bell size={22} />,
-    },
-    {
-      name: "Profile",
-      path: "/profile",
-      icon: <User size={22} />,
-    },
-  ];
+  const currentPath = location.pathname;
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-border">
-      <div className="max-w-md mx-auto flex justify-around px-2">
-        {navItems.map((item) => (
-          <Link
-            to={item.path}
-            key={item.name}
-            className={`nav-item p-3 ${activeTab === item.path ? "active" : ""}`}
-            onClick={() => setActiveTab(item.path)}
-          >
-            {item.icon}
-            <span className="text-xs font-medium">{item.name}</span>
-          </Link>
-        ))}
-      </div>
+    <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-border h-16 px-2 flex items-center justify-around z-30">
+      <Link
+        to="/"
+        className={`flex flex-col items-center justify-center w-1/4 py-2 ${
+          currentPath === "/" ? "text-primary" : "text-gray-500"
+        }`}
+      >
+        <Home size={22} />
+        <span className="text-xs mt-1">Home</span>
+      </Link>
+
+      <Link
+        to="/saved-jobs"
+        className={`flex flex-col items-center justify-center w-1/4 py-2 relative ${
+          currentPath === "/saved-jobs" ? "text-primary" : "text-gray-500"
+        }`}
+      >
+        <Briefcase size={22} />
+        {savedJobCount > 0 && (
+          <span className="absolute top-0 right-5 bg-primary text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+            {savedJobCount}
+          </span>
+        )}
+        <span className="text-xs mt-1">Saved</span>
+      </Link>
+
+      <Link
+        to="/jobs-applied"
+        className={`flex flex-col items-center justify-center w-1/4 py-2 ${
+          currentPath === "/jobs-applied" ? "text-primary" : "text-gray-500"
+        }`}
+      >
+        <Bell size={22} />
+        <span className="text-xs mt-1">Applied</span>
+      </Link>
+
+      <Link
+        to="/profile"
+        className={`flex flex-col items-center justify-center w-1/4 py-2 ${
+          currentPath === "/profile" ? "text-primary" : "text-gray-500"
+        }`}
+      >
+        <User size={22} />
+        <span className="text-xs mt-1">Profile</span>
+      </Link>
     </div>
   );
 };

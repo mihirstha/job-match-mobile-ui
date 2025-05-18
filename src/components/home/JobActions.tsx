@@ -5,9 +5,10 @@ interface JobActionsProps {
   onReject: () => void;
   onApply: () => void;
   onSave: () => void;
+  onDetails: () => void; // New prop for viewing job details
 }
 
-const JobActions = ({ onReject, onApply, onSave }: JobActionsProps) => {
+const JobActions = ({ onReject, onApply, onSave, onDetails }: JobActionsProps) => {
   return (
     <div className="absolute bottom-4 w-full flex justify-between px-8 z-10">
       <button 

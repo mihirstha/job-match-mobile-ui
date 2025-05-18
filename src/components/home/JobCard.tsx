@@ -22,13 +22,12 @@ const JobCard = ({
   return (
     <div 
       ref={cardRef}
-      className="absolute bg-white rounded-xl border border-border overflow-hidden shadow-lg w-full h-[430px]"
+      className="absolute bg-white rounded-xl border border-border overflow-hidden shadow-lg w-full h-[430px] max-h-[calc(100vh-220px)]"
       onTouchStart={onTouchStart}
       onTouchMove={onTouchMove}
       onTouchEnd={onTouchEnd}
-      onClick={onClick}
     >
-      <div className="relative h-56 bg-gray-100">
+      <div className="relative h-56 max-h-[40%] bg-gray-100">
         <img 
           src={job.image} 
           alt={job.title}
@@ -41,7 +40,10 @@ const JobCard = ({
         </div>
       </div>
       
-      <div className="p-4 space-y-2 pb-16">
+      <div 
+        className="p-4 space-y-2 overflow-auto h-[calc(100%-224px)]"
+        onClick={onClick} // Move onClick here so user can tap anywhere to view details
+      >
         <div className="flex justify-between items-center">
           <div className="flex items-center space-x-2">
             <div className="flex items-center space-x-1">
@@ -71,6 +73,10 @@ const JobCard = ({
               </span>
             ))}
           </div>
+        </div>
+
+        <div className="pt-4 text-center text-sm text-primary">
+          Tap to view details
         </div>
       </div>
     </div>
