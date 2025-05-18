@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { X, MapPin, Clock, Briefcase, ArrowRight, Heart, Star } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
@@ -169,18 +168,18 @@ const JobDetails = ({ job, onClose }: JobDetailsProps) => {
                 Reject
               </button>
               <button 
-                className="flex-1 py-3 border border-green-500 rounded-lg text-green-500 font-medium flex items-center justify-center"
-                onClick={handleSave}
-              >
-                <Heart size={18} className="mr-1" />
-                Save
-              </button>
-              <button 
                 className="flex-1 py-3 bg-primary rounded-lg text-white font-medium flex items-center justify-center"
                 onClick={handleApply}
               >
                 <Star size={18} className="mr-1" aria-label="Apply" />
                 Apply
+              </button>
+              <button 
+                className="flex-1 py-3 border border-green-500 rounded-lg text-green-500 font-medium flex items-center justify-center"
+                onClick={handleSave}
+              >
+                <Heart size={18} className="mr-1" />
+                Save
               </button>
             </div>
           </>
@@ -239,7 +238,7 @@ const JobDetails = ({ job, onClose }: JobDetailsProps) => {
                       <p className="font-medium">Master of Computer Science, Kathmandu University</p>
                     </div>
                     
-                    {/* Video Resume Note moved here */}
+                    {/* Video Resume Note placed here between Education and Confirm button */}
                     {job.requiresVideoResume && (
                       <div className="p-3 bg-yellow-50 rounded-lg border border-yellow-200 mb-6">
                         <p className="text-sm text-yellow-800">

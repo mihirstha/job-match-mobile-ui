@@ -26,6 +26,7 @@ const JobCard = ({
       onTouchStart={onTouchStart}
       onTouchMove={onTouchMove}
       onTouchEnd={onTouchEnd}
+      onClick={onClick} // Make the entire card clickable
     >
       <div className="relative h-56 max-h-[40%] bg-gray-100">
         <img 
@@ -40,10 +41,7 @@ const JobCard = ({
         </div>
       </div>
       
-      <div 
-        className="p-4 space-y-2 overflow-auto h-[calc(100%-224px)]"
-        onClick={onClick} // Move onClick here so user can tap anywhere to view details
-      >
+      <div className="p-4 space-y-2 overflow-auto h-[calc(100%-224px)]">
         <div className="flex justify-between items-center">
           <div className="flex items-center space-x-2">
             <div className="flex items-center space-x-1">

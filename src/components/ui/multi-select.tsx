@@ -29,8 +29,14 @@ export const MultiSelect = ({
   
   const handleSelect = (value: string) => {
     if (selectedValues.includes(value)) {
+      // Check if removing would violate minimum selection
+      if (selectedValues.length <= minSelected) {
+        setErrorMessage(`You must select at least ${minSelected} options`);
+        return;
+      }
       // Remove if already selected
       onChange(selectedValues.filter(item => item !== value));
+      setErrorMessage(null);
     } else {
       // Add if not at max
       if (selectedValues.length < maxSelected) {
@@ -48,6 +54,7 @@ export const MultiSelect = ({
       return;
     }
     onChange(selectedValues.filter(item => item !== value));
+    setErrorMessage(null);
   };
   
   const filteredOptions = options.filter(option => 

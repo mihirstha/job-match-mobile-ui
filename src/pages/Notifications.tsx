@@ -1,18 +1,9 @@
-
 import { useState } from "react";
 import MobileNavbar from "@/components/MobileNavbar";
-import { BellOff, Check, Clock } from "lucide-react";
+import { BellOff, Check, Clock, Calendar, Briefcase, Bell } from "lucide-react";
 
 const Notifications = () => {
   const [notifications, setNotifications] = useState([
-    {
-      id: 1,
-      title: "Interview Invitation",
-      message: "You've been invited for an interview with TechCorp Nepal for the Senior React Developer position.",
-      time: "2 hours ago",
-      read: false,
-      type: "interview"
-    },
     {
       id: 2,
       title: "Application Viewed",

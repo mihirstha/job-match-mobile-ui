@@ -5,7 +5,7 @@ interface JobActionsProps {
   onReject: () => void;
   onApply: () => void;
   onSave: () => void;
-  onDetails: () => void; // New prop for viewing job details
+  onDetails: () => void;
 }
 
 const JobActions = ({ onReject, onApply, onSave, onDetails }: JobActionsProps) => {
