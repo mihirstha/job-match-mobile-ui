@@ -25,31 +25,6 @@ const JobDetails = ({ job, onClose }: JobDetailsProps) => {
   };
   
   const completeApplication = () => {
-    // Store applied job in localStorage
-    const appliedJobs = JSON.parse(localStorage.getItem('appliedJobs') || '[]');
-    if (!appliedJobs.includes(job.id)) {
-      appliedJobs.push(job.id);
-      localStorage.setItem('appliedJobs', JSON.stringify(appliedJobs));
-      
-      // Create a notification for the job application
-      const existingNotifications = JSON.parse(localStorage.getItem('notifications') || '[]');
-      const notification = {
-        id: Date.now(),
-        title: "Application Submitted",
-        message: `Your application for ${job.title} at ${job.company} has been submitted successfully.`,
-        time: "Just now",
-        read: false,
-        type: "application"
-      };
-      
-      const updatedNotifications = [notification, ...existingNotifications];
-      localStorage.setItem('notifications', JSON.stringify(updatedNotifications));
-      
-      // Update notification count
-      const unreadCount = updatedNotifications.filter((n: any) => !n.read).length;
-      localStorage.setItem('notificationCount', unreadCount.toString());
-    }
-    
     toast({
       title: "Application Submitted",
       description: `You've applied to ${job.title} at ${job.company}`,
@@ -58,13 +33,6 @@ const JobDetails = ({ job, onClose }: JobDetailsProps) => {
   };
   
   const handleSave = () => {
-    // Store saved job in localStorage
-    const savedJobs = JSON.parse(localStorage.getItem('savedJobs') || '[]');
-    if (!savedJobs.includes(job.id)) {
-      savedJobs.push(job.id);
-      localStorage.setItem('savedJobs', JSON.stringify(savedJobs));
-    }
-    
     toast({
       title: "Job Saved",
       description: `${job.title} at ${job.company} has been saved`,
@@ -81,9 +49,9 @@ const JobDetails = ({ job, onClose }: JobDetailsProps) => {
 
   return (
     <div className="fixed inset-0 bg-black/50 z-50 flex items-end justify-center">
-      <div className="bg-white rounded-t-2xl w-full max-h-[90vh] overflow-auto animate-slide-in-bottom max-w-md mx-auto">
+      <div className="bg-white rounded-t-2xl w-full max-h-[90vh] overflow-auto animate-slide-in-bottom">
         {applicationStep === null && (
-          <div className="flex flex-col h-full">
+          <>
             <div className="sticky top-0 bg-white z-10">
               <div className="flex justify-between items-center p-4 border-b">
                 <h2 className="text-xl font-semibold">Job Details</h2>
@@ -191,7 +159,7 @@ const JobDetails = ({ job, onClose }: JobDetailsProps) => {
               </div>
             </div>
             
-            <div className="fixed bottom-0 left-0 right-0 p-4 bg-white border-t flex gap-3 max-w-md mx-auto">
+            <div className="fixed bottom-0 left-0 right-0 p-4 bg-white border-t flex gap-3">
               <button 
                 className="flex-1 py-3 border border-red-500 rounded-lg text-red-500 font-medium flex items-center justify-center"
                 onClick={handleReject}
@@ -214,11 +182,11 @@ const JobDetails = ({ job, onClose }: JobDetailsProps) => {
                 Save
               </button>
             </div>
-          </div>
+          </>
         )}
 
         {applicationStep === 'confirm' && (
-          <div className="flex flex-col h-full">
+          <>
             <div className="sticky top-0 bg-white z-10">
               <div className="flex justify-between items-center p-4 border-b">
                 <h2 className="text-xl font-semibold">Confirm Application</h2>
@@ -283,7 +251,7 @@ const JobDetails = ({ job, onClose }: JobDetailsProps) => {
               </div>
             </div>
             
-            <div className="sticky bottom-0 left-0 right-0 p-4 bg-white border-t max-w-md mx-auto">
+            <div className="sticky bottom-0 left-0 right-0 p-4 bg-white border-t">
               <button 
                 className="w-full py-3 bg-primary rounded-lg text-white font-medium flex items-center justify-center"
                 onClick={handleConfirmApplication}
@@ -292,11 +260,11 @@ const JobDetails = ({ job, onClose }: JobDetailsProps) => {
                 <ArrowRight size={16} className="ml-1" />
               </button>
             </div>
-          </div>
+          </>
         )}
 
         {applicationStep === 'video' && (
-          <div className="flex flex-col h-full">
+          <>
             <div className="sticky top-0 bg-white z-10">
               <div className="flex justify-between items-center p-4 border-b">
                 <h2 className="text-xl font-semibold">Video Resume</h2>
@@ -349,7 +317,7 @@ const JobDetails = ({ job, onClose }: JobDetailsProps) => {
               </div>
             </div>
             
-            <div className="sticky bottom-0 left-0 right-0 p-4 bg-white border-t space-y-3 max-w-md mx-auto">
+            <div className="sticky bottom-0 left-0 right-0 p-4 bg-white border-t space-y-3">
               <button 
                 className="w-full py-3 bg-primary rounded-lg text-white font-medium"
                 onClick={completeApplication}
@@ -364,7 +332,7 @@ const JobDetails = ({ job, onClose }: JobDetailsProps) => {
                 Back
               </button>
             </div>
-          </div>
+          </>
         )}
       </div>
     </div>

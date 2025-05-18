@@ -29,17 +29,6 @@ const Login = () => {
       description: "Welcome back! Redirecting to your dashboard.",
     });
     
-    // Set a user object in localStorage to simulate login
-    const user = {
-      id: 1,
-      name: "Aarav Sharma",
-      email: email,
-      role: "Job Seeker",
-      avatar: "",
-    };
-    
-    localStorage.setItem('user', JSON.stringify(user));
-    
     // Simulate a successful login
     setTimeout(() => {
       window.location.href = "/";
