@@ -2,6 +2,7 @@
 import { useState } from "react";
 import MobileNavbar from "@/components/MobileNavbar";
 import { useToast } from "@/hooks/use-toast";
+import { useNavigate } from "react-router-dom";
 import { Camera, Video, Briefcase, GraduationCap, List, Edit, X, Check, Save, Plus } from "lucide-react";
 
 // Define the types for our data structures
@@ -40,13 +41,26 @@ interface ProfileData {
   videoResume: null | string;
 }
 
+interface EditedContent {
+  [key: string]: any;
+}
+
 const Profile = () => {
   const [activeTab, setActiveTab] = useState("profile");
   const { toast } = useToast();
+  const navigate = useNavigate();
   
-  // Edit states - properly typing editedContent
+  // Edit states
   const [editingSection, setEditingSection] = useState<string|null>(null);
-  const [editedContent, setEditedContent] = useState<any>({}); // We'll type this contextually when using it
+  const [editedContent, setEditedContent] = useState<EditedContent>({});
+  
+  // Change password state
+  const [showPasswordChange, setShowPasswordChange] = useState(false);
+  const [passwordData, setPasswordData] = useState({
+    currentPassword: "",
+    newPassword: "",
+    confirmPassword: ""
+  });
   
   // Mock profile data
   const [profile, setProfile] = useState<ProfileData>({
@@ -322,12 +336,132 @@ const Profile = () => {
     });
   };
 
+  // Updated logout handler with navigation
   const handleLogout = () => {
+    // Clear any stored user data/tokens
+    localStorage.removeItem("user");
+    localStorage.removeItem("token");
+    
     toast({
       title: "Logged Out",
       description: "You have been successfully logged out.",
     });
-    // In a real app, we would clear session data and redirect
+    
+    // Redirect to welcome screen
+    setTimeout(() => {
+      navigate("/welcome");
+    }, 1000);
+  };
+  
+  // Password change handlers
+  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setPasswordData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+  
+  const handleChangePasswordSubmit = () => {
+    // Validation
+    if (!passwordData.currentPassword || !passwordData.newPassword || !passwordData.confirmPassword) {
+      toast({
+        title: "Missing Information",
+        description: "Please fill all password fields.",
+        variant: "destructive"
+      });
+      return;
+    }
+    
+    if (passwordData.newPassword !== passwordData.confirmPassword) {
+      toast({
+        title: "Password Mismatch",
+        description: "New password and confirmation do not match.",
+        variant: "destructive"
+      });
+      return;
+    }
+    
+    // In a real app, we would send this to an API
+    toast({
+      title: "Password Changed",
+      description: "Your password has been successfully updated.",
+    });
+    
+    setPasswordData({
+      currentPassword: "",
+      newPassword: "",
+      confirmPassword: ""
+    });
+    
+    setShowPasswordChange(false);
+  };
+  
+  // Password change panel
+  const renderPasswordChange = () => {
+    if (!showPasswordChange) return null;
+    
+    return (
+      <div className="fixed inset-0 bg-black/50 z-50 flex items-end justify-center">
+        <div className="bg-white rounded-t-2xl w-full max-h-[90vh] overflow-auto animate-slide-in-bottom">
+          <div className="sticky top-0 bg-white z-10">
+            <div className="flex justify-between items-center p-4 border-b">
+              <h2 className="text-xl font-semibold">Change Password</h2>
+              <button
+                onClick={() => setShowPasswordChange(false)}
+                className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100"
+              >
+                <X size={18} />
+              </button>
+            </div>
+          </div>
+          
+          <div className="p-5 space-y-4">
+            <div className="space-y-3">
+              <div className="space-y-1">
+                <label className="text-sm font-medium">Current Password</label>
+                <input
+                  type="password"
+                  name="currentPassword"
+                  value={passwordData.currentPassword}
+                  onChange={handlePasswordChange}
+                  className="w-full border border-gray-300 rounded-lg p-3"
+                />
+              </div>
+              
+              <div className="space-y-1">
+                <label className="text-sm font-medium">New Password</label>
+                <input
+                  type="password"
+                  name="newPassword"
+                  value={passwordData.newPassword}
+                  onChange={handlePasswordChange}
+                  className="w-full border border-gray-300 rounded-lg p-3"
+                />
+              </div>
+              
+              <div className="space-y-1">
+                <label className="text-sm font-medium">Confirm New Password</label>
+                <input
+                  type="password"
+                  name="confirmPassword"
+                  value={passwordData.confirmPassword}
+                  onChange={handlePasswordChange}
+                  className="w-full border border-gray-300 rounded-lg p-3"
+                />
+              </div>
+            </div>
+            
+            <button 
+              className="w-full py-3 bg-primary text-white font-medium rounded-lg mt-4"
+              onClick={handleChangePasswordSubmit}
+            >
+              Update Password
+            </button>
+          </div>
+        </div>
+      </div>
+    );
   };
   
   // Privacy settings panel
@@ -1002,7 +1136,10 @@ const Profile = () => {
               </div>
               
               <div className="space-y-3">
-                <button className="btn-outline w-full">
+                <button 
+                  className="btn-outline w-full"
+                  onClick={() => setShowPasswordChange(true)}
+                >
                   Change Password
                 </button>
                 
@@ -1033,6 +1170,7 @@ const Profile = () => {
           {/* Render modals */}
           {renderPrivacySettings()}
           {renderNotificationSettings()}
+          {renderPasswordChange()}
         </div>
       </div>
       <MobileNavbar />
