@@ -1,202 +1,193 @@
 
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { ChevronRight, Heart, Zap, Gift } from "lucide-react";
+import { ChevronRight, Shield, Zap, Clock, CheckCircle, Plus } from "lucide-react";
 
 const Welcome = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [mascotAnimation, setMascotAnimation] = useState("bounce");
   
   const slides = [
     {
-      title: "Welcome to Job Matchy Nepal! 🎉",
-      description: "Meet Owly, your friendly job hunting companion! Discover thousands of FREE job opportunities across Nepal with just a swipe",
-      image: "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?auto=format&fit=crop&w=800&q=80",
-      icon: <Gift className="w-8 h-8 text-yellow-500" />,
-      feature: "100% FREE"
+      title: "Welcome to Job Matchy Nepal",
+      subtitle: "Your Gateway to Career Success",
+      description: "Discover thousands of job opportunities across Nepal with our innovative matching platform. Register for free and unlock endless possibilities.",
+      icon: <Plus className="w-6 h-6 text-primary" />,
+      color: "from-blue-50 to-cyan-50"
     },
     {
-      title: "Swipe Your Way to Success! 💼",
-      description: "No more endless scrolling! Our AI matches you with perfect jobs based on your skills. Swipe right to apply instantly - it's that easy!",
-      image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=800&q=80",
-      icon: <Heart className="w-8 h-8 text-red-500" />,
-      feature: "SMART MATCHING"
+      title: "Easy Swipe Matching",
+      subtitle: "Find Jobs Effortlessly",
+      description: "Swipe right to show interest, swipe left to skip. Find jobs based on personality and compatibility, not just qualifications.",
+      icon: <Zap className="w-6 h-6 text-orange-500" />,
+      color: "from-orange-50 to-yellow-50"
     },
     {
-      title: "Apply with Lightning Speed! ⚡",
-      description: "One tap, one application! Track your progress, get notifications, and land your dream job faster than ever before",
-      image: "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&w=800&q=80",
-      icon: <Zap className="w-8 h-8 text-blue-500" />,
-      feature: "INSTANT APPLY"
+      title: "Verified Profiles",
+      subtitle: "Trust and Safety First",
+      description: "All profiles are verified for credibility. Job seekers get certification badges, companies undergo screening for your safety.",
+      icon: <Shield className="w-6 h-6 text-green-500" />,
+      color: "from-green-50 to-emerald-50"
+    },
+    {
+      title: "Flexible Work Options",
+      subtitle: "From Full-Time to One-Day Gigs",
+      description: "Full-time, part-time, internships, or same-day hiring. We support all types of work arrangements to match your lifestyle.",
+      icon: <Clock className="w-6 h-6 text-purple-500" />,
+      color: "from-purple-50 to-pink-50"
     }
   ];
   
   const nextSlide = () => {
     if (currentSlide < slides.length - 1) {
       setCurrentSlide(currentSlide + 1);
-      setMascotAnimation("pulse");
-      setTimeout(() => setMascotAnimation("bounce"), 500);
     }
   };
 
-  // Auto-animate mascot every 3 seconds
+  // Auto advance slides
   useEffect(() => {
     const interval = setInterval(() => {
-      setMascotAnimation(prev => prev === "bounce" ? "pulse" : "bounce");
-    }, 3000);
+      setCurrentSlide(prev => (prev + 1) % slides.length);
+    }, 5000);
     return () => clearInterval(interval);
   }, []);
 
+  const features = [
+    {
+      icon: <Zap className="w-5 h-5 text-primary" />,
+      title: "Register for Free",
+      description: "Embark on your job search adventure without any cost – simply register for free and open the doors to countless opportunities waiting for you."
+    },
+    {
+      icon: <CheckCircle className="w-5 h-5 text-green-500" />,
+      title: "Apply for Jobs",
+      description: "Take action towards your career aspirations by seamlessly applying for jobs that align with your skills and ambitions, setting yourself on the path to success."
+    },
+    {
+      icon: <Shield className="w-5 h-5 text-blue-500" />,
+      title: "Get Shortlisted",
+      description: "Set yourself apart from other candidates as you impress recruiters and hiring managers by completing and updating your profile regularly."
+    }
+  ];
+
   return (
-    <div className="mobile-container bg-gradient-to-br from-blue-50 to-cyan-50 relative overflow-hidden">
-      {/* Floating background elements */}
-      <div className="absolute top-10 left-4 w-20 h-20 bg-primary/10 rounded-full animate-pulse"></div>
-      <div className="absolute top-32 right-8 w-16 h-16 bg-yellow-200/30 rounded-full animate-bounce"></div>
-      <div className="absolute bottom-40 left-8 w-12 h-12 bg-green-200/40 rounded-full animate-pulse"></div>
-      
-      <div className="flex flex-col h-full relative z-10">
-        <div className="flex-1 flex flex-col">
-          <div className="flex justify-between items-center p-4">
-            <div className="flex items-center space-x-2">
-              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-              <span className="text-sm text-green-600 font-medium">LIVE</span>
-            </div>
-            <Link 
-              to="/login" 
-              className="text-primary font-medium hover:text-primary/80 transition-colors"
-            >
-              Skip
-            </Link>
-          </div>
-          
-          {/* Logo and Mascot Section */}
-          <div className="flex flex-col items-center justify-center py-4 space-y-4">
-            <img 
-              src="/lovable-uploads/6d023d51-3e36-4395-81d8-133349e7eb9a.png" 
-              alt="Job Matchy Nepal Logo" 
-              className="h-12 object-contain"
-            />
-            
-            {/* Animated Mascot */}
-            <div className="relative">
-              <div className={`transform transition-all duration-500 ${
-                mascotAnimation === "bounce" ? "animate-bounce" : "animate-pulse scale-110"
-              }`}>
-                <img 
-                  src="/lovable-uploads/32c87b52-af97-4dc9-a773-03157b5f397d.png" 
-                  alt="Owly Mascot" 
-                  className="w-20 h-20 object-contain drop-shadow-lg"
-                />
-              </div>
-              {/* Speech bubble */}
-              <div className="absolute -top-8 -right-4 bg-white rounded-lg px-3 py-1 shadow-lg border border-primary/20 animate-fade-in">
-                <span className="text-xs text-primary font-medium">Hi there! 👋</span>
-                <div className="absolute bottom-0 left-4 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-white"></div>
-              </div>
-            </div>
-          </div>
-          
-          {/* Main Content */}
-          <div className="flex-1 flex flex-col items-center justify-center p-5">
-            {/* Feature Badge */}
-            <div className="mb-4 flex items-center space-x-2 bg-white rounded-full px-4 py-2 shadow-lg border border-primary/20">
+    <div className="mobile-container bg-white relative overflow-hidden">
+      {/* Header */}
+      <div className="flex justify-between items-center p-4 relative z-10">
+        <div className="flex items-center space-x-2">
+          <img 
+            src="/lovable-uploads/6d023d51-3e36-4395-81d8-133349e7eb9a.png" 
+            alt="Job Matchy Nepal Logo" 
+            className="h-8 object-contain"
+          />
+        </div>
+        <Link 
+          to="/login" 
+          className="text-primary font-medium hover:text-primary/80 transition-colors text-sm"
+        >
+          Skip
+        </Link>
+      </div>
+
+      {/* Main Content */}
+      <div className="flex flex-col h-full">
+        {/* Hero Section with Slides */}
+        <div className={`relative bg-gradient-to-br ${slides[currentSlide].color} px-6 py-8 transition-all duration-500`}>
+          <div className="text-center space-y-4">
+            {/* Feature Icon */}
+            <div className="inline-flex items-center justify-center w-16 h-16 bg-white rounded-full shadow-lg mb-4">
               {slides[currentSlide].icon}
-              <span className="text-sm font-bold text-gray-700">{slides[currentSlide].feature}</span>
-            </div>
-
-            <div 
-              className="w-full h-64 rounded-2xl mb-6 overflow-hidden shadow-xl border-4 border-white relative"
-              style={{
-                backgroundImage: `url(${slides[currentSlide].image})`,
-                backgroundSize: 'cover',
-                backgroundPosition: 'center'
-              }}
-            >
-              <div className="h-full w-full bg-gradient-to-b from-transparent via-transparent to-black/70 flex items-end p-5">
-                <div className="text-white">
-                  <h2 className="text-2xl font-bold mb-2 animate-fade-in">{slides[currentSlide].title}</h2>
-                  <p className="text-sm leading-relaxed animate-slide-in-bottom">{slides[currentSlide].description}</p>
-                </div>
-              </div>
-              
-              {/* Decorative corner elements */}
-              <div className="absolute top-4 right-4 w-8 h-8 bg-white/20 rounded-full backdrop-blur-sm animate-pulse"></div>
             </div>
             
-            {/* Progress indicators with animation */}
-            <div className="flex space-x-3 mb-8">
-              {slides.map((_, index) => (
-                <div 
-                  key={index}
-                  className={`h-3 rounded-full transition-all duration-300 ${
-                    index === currentSlide 
-                      ? "bg-primary w-8 shadow-lg" 
-                      : "bg-gray-300 w-3 hover:bg-gray-400"
-                  }`}
-                />
-              ))}
+            <div className="space-y-2">
+              <h1 className="text-2xl font-bold text-gray-900">
+                {slides[currentSlide].title}
+              </h1>
+              <p className="text-primary font-semibold text-lg">
+                {slides[currentSlide].subtitle}
+              </p>
+              <p className="text-gray-600 text-sm leading-relaxed max-w-sm mx-auto">
+                {slides[currentSlide].description}
+              </p>
             </div>
+          </div>
 
-            {/* Feature highlights */}
-            <div className="grid grid-cols-3 gap-4 w-full mb-6">
-              <div className="text-center p-3 bg-white/50 rounded-lg backdrop-blur-sm">
-                <div className="text-2xl mb-1">🆓</div>
-                <span className="text-xs font-medium text-gray-700">100% Free</span>
-              </div>
-              <div className="text-center p-3 bg-white/50 rounded-lg backdrop-blur-sm">
-                <div className="text-2xl mb-1">👆</div>
-                <span className="text-xs font-medium text-gray-700">Easy Swipe</span>
-              </div>
-              <div className="text-center p-3 bg-white/50 rounded-lg backdrop-blur-sm">
-                <div className="text-2xl mb-1">⚡</div>
-                <span className="text-xs font-medium text-gray-700">Instant Apply</span>
-              </div>
-            </div>
+          {/* Progress indicators */}
+          <div className="flex justify-center space-x-2 mt-6">
+            {slides.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => setCurrentSlide(index)}
+                className={`h-2 rounded-full transition-all duration-300 ${
+                  index === currentSlide 
+                    ? "bg-primary w-6" 
+                    : "bg-white/50 w-2 hover:bg-white/70"
+                }`}
+              />
+            ))}
           </div>
         </div>
-        
+
+        {/* Features Section */}
+        <div className="flex-1 px-6 py-6 space-y-4">
+          {features.map((feature, index) => (
+            <div key={index} className="flex items-start space-x-4 p-4 bg-white rounded-lg border border-gray-100 shadow-sm">
+              <div className="flex-shrink-0 w-10 h-10 bg-gray-50 rounded-full flex items-center justify-center">
+                {feature.icon}
+              </div>
+              <div className="flex-1">
+                <h3 className="font-semibold text-gray-900 mb-1">
+                  {feature.title}
+                </h3>
+                <p className="text-gray-600 text-sm leading-relaxed">
+                  {feature.description}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+
         {/* Action Buttons */}
-        <div className="p-5 pb-10 space-y-3">
+        <div className="p-6 space-y-3 bg-white border-t border-gray-100">
           {currentSlide < slides.length - 1 ? (
             <button 
               onClick={nextSlide}
-              className="w-full py-4 bg-gradient-to-r from-primary to-blue-500 rounded-2xl text-white font-bold flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 active:scale-95"
+              className="w-full py-4 bg-gradient-to-r from-primary to-blue-500 rounded-xl text-white font-semibold flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98]"
             >
-              Continue the Journey
-              <ChevronRight size={24} className="ml-2 animate-bounce" />
+              Continue
+              <ChevronRight size={20} className="ml-2" />
             </button>
           ) : (
             <div className="space-y-3">
               <Link
-                to="/login"
-                className="block w-full py-4 bg-gradient-to-r from-primary to-blue-500 rounded-2xl text-white font-bold text-center shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 active:scale-95"
+                to="/signup"
+                className="block w-full py-4 bg-gradient-to-r from-primary to-blue-500 rounded-xl text-white font-semibold text-center shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98]"
               >
-                🚀 Start Job Hunting Now!
+                Get Started - Register Free
               </Link>
               <Link
-                to="/signup"
-                className="block w-full py-4 border-2 border-primary rounded-2xl text-primary font-bold text-center bg-white/80 backdrop-blur-sm hover:bg-white transition-all duration-300 transform hover:scale-105 active:scale-95"
+                to="/login"
+                className="block w-full py-4 border-2 border-primary rounded-xl text-primary font-semibold text-center bg-white hover:bg-primary/5 transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98]"
               >
-                ✨ Create Free Account
+                Already have an account? Sign In
               </Link>
-              
-              {/* Trust indicators */}
-              <div className="flex items-center justify-center space-x-4 pt-2">
-                <div className="flex items-center space-x-1">
-                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                  <span className="text-xs text-gray-600">Secure</span>
-                </div>
-                <div className="flex items-center space-x-1">
-                  <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                  <span className="text-xs text-gray-600">Private</span>
-                </div>
-                <div className="flex items-center space-x-1">
-                  <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
-                  <span className="text-xs text-gray-600">Fast</span>
-                </div>
-              </div>
             </div>
           )}
+          
+          {/* Trust indicators */}
+          <div className="flex items-center justify-center space-x-6 pt-2">
+            <div className="flex items-center space-x-1">
+              <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+              <span className="text-xs text-gray-500">100% Free</span>
+            </div>
+            <div className="flex items-center space-x-1">
+              <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+              <span className="text-xs text-gray-500">Verified</span>
+            </div>
+            <div className="flex items-center space-x-1">
+              <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
+              <span className="text-xs text-gray-500">Secure</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
