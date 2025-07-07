@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import MobileNavbar from "@/components/MobileNavbar";
 import { useToast } from "@/hooks/use-toast";
@@ -110,7 +109,7 @@ const Profile = () => {
     },
     videoResume: null
   });
-  
+
   // Experience editing
   const handleEditExperience = () => {
     setEditingSection('experience');
@@ -243,9 +242,13 @@ const Profile = () => {
   
   const handleEditSection = (section: string) => {
     setEditingSection(section);
-    setEditedContent({
-      ...profile[section as keyof ProfileData]
-    });
+    if (section === 'about') {
+      setEditedContent({ about: profile.about });
+    } else {
+      setEditedContent({
+        ...(profile[section as keyof ProfileData] as object)
+      });
+    }
   };
   
   const handleCancelEdit = () => {
@@ -254,10 +257,17 @@ const Profile = () => {
   };
   
   const handleSaveEdit = (section: string) => {
-    setProfile({
-      ...profile,
-      [section]: editedContent
-    });
+    if (section === 'about') {
+      setProfile({
+        ...profile,
+        about: editedContent.about
+      });
+    } else {
+      setProfile({
+        ...profile,
+        [section]: editedContent
+      });
+    }
     
     setEditingSection(null);
     setEditedContent({});
@@ -705,7 +715,7 @@ const Profile = () => {
                 
                 {editingSection === 'experience' ? (
                   <div className="space-y-4">
-                    {editedContent.map((exp, index) => (
+                    {(editedContent as ExperienceItem[]).map((exp, index) => (
                       <div key={exp.id || index} className="border border-border rounded-lg p-4 space-y-3">
                         <div className="flex justify-between">
                           <h3 className="font-medium">Experience {index + 1}</h3>
@@ -812,7 +822,7 @@ const Profile = () => {
                   <div className="space-y-3">
                     <div className="border border-border rounded-lg p-3">
                       <div className="flex flex-wrap gap-2 mb-4">
-                        {editedContent.map((skill, index) => (
+                        {(editedContent as string[]).map((skill, index) => (
                           <div key={index} className="bg-primary/10 text-primary text-sm px-3 py-1 rounded-full flex items-center">
                             <input
                               type="text"
@@ -883,7 +893,7 @@ const Profile = () => {
                 
                 {editingSection === 'education' ? (
                   <div className="space-y-4">
-                    {editedContent.map((edu, index) => (
+                    {(editedContent as EducationItem[]).map((edu, index) => (
                       <div key={edu.id || index} className="border border-border rounded-lg p-4 space-y-3">
                         <div className="flex justify-between">
                           <h3 className="font-medium">Education {index + 1}</h3>
@@ -1035,9 +1045,9 @@ const Profile = () => {
               <div className="space-y-4">
                 <div className="space-y-2">
                   <label className="text-sm font-medium">Preferred Location</label>
-                  <select className="w-full p-3 rounded-lg border border-border">
+                  <select className="w-full p-3 rounded-lg border border-border" defaultValue="kathmandu">
                     <option value="any">Anywhere in Nepal</option>
-                    <option value="kathmandu" selected>Kathmandu</option>
+                    <option value="kathmandu">Kathmandu</option>
                     <option value="pokhara">Pokhara</option>
                     <option value="lalitpur">Lalitpur</option>
                     <option value="bhaktapur">Bhaktapur</option>
@@ -1064,9 +1074,9 @@ const Profile = () => {
                 
                 <div className="space-y-2">
                   <label className="text-sm font-medium">Industries</label>
-                  <select className="w-full p-3 rounded-lg border border-border" multiple size={4}>
-                    <option value="technology" selected>Technology</option>
-                    <option value="finance" selected>Finance</option>
+                  <select className="w-full p-3 rounded-lg border border-border" multiple size={4} defaultValue={profile.preferences.industries}>
+                    <option value="technology">Technology</option>
+                    <option value="finance">Finance</option>
                     <option value="healthcare">Healthcare</option>
                     <option value="education">Education</option>
                     <option value="retail">Retail</option>
