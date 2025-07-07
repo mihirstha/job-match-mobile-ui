@@ -2,11 +2,12 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
-import { Phone, User, Calendar, GraduationCap, Briefcase, Video, ChevronRight, ChevronLeft, Info, X, Plus, Heart } from "lucide-react";
+import { Phone, User, Calendar, GraduationCap, Briefcase, Video, ChevronRight, ChevronLeft, Info, X, Plus, Heart, MapPin } from "lucide-react";
 
 // Signup steps components
 import BasicInfoStep from "@/components/signup/BasicInfoStep";
 import PersonalInfoStep from "@/components/signup/PersonalInfoStep";
+import AddressStep from "@/components/signup/AddressStep";
 import EducationStep from "@/components/signup/EducationStep";
 import ExperienceStep from "@/components/signup/ExperienceStep";
 import SkillsStep from "@/components/signup/SkillsStep";
@@ -22,6 +23,9 @@ const SignUp = () => {
     confirmPassword: "",
     dateOfBirth: "",
     gender: "",
+    province: "",
+    city: "",
+    address: "",
     education: {
       level: "",
       institution: "",
@@ -87,6 +91,15 @@ const SignUp = () => {
       return;
     }
     
+    if (step === 3 && (!formData.province || !formData.city)) {
+      toast({
+        title: "Error",
+        description: "Please select your province and city",
+        variant: "destructive",
+      });
+      return;
+    }
+    
     // Move to next step
     setStep(prev => prev + 1);
   };
@@ -122,15 +135,15 @@ const SignUp = () => {
   const renderStepIndicator = () => {
     return (
       <div className="flex justify-between items-center mb-4">
-        {[1, 2, 3, 4, 5, 6].map((stepNumber) => (
+        {[1, 2, 3, 4, 5, 6, 7].map((stepNumber) => (
           <div key={stepNumber} className="flex items-center">
             <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
               step >= stepNumber ? 'bg-primary text-white' : 'bg-accent text-foreground'
             }`}>
               {stepNumber}
             </div>
-            {stepNumber < 6 && (
-              <div className={`h-0.5 w-6 ${
+            {stepNumber < 7 && (
+              <div className={`h-0.5 w-4 ${
                 step > stepNumber ? 'bg-primary' : 'bg-border'
               }`}></div>
             )}
@@ -159,20 +172,27 @@ const SignUp = () => {
         );
       case 3:
         return (
+          <AddressStep 
+            formData={formData} 
+            updateFormData={updateFormData} 
+          />
+        );
+      case 4:
+        return (
           <EducationStep 
             formData={formData} 
             updateFormData={updateFormData} 
             updateNestedFormData={updateNestedFormData} 
           />
         );
-      case 4:
+      case 5:
         return (
           <ExperienceStep 
             formData={formData} 
             updateFormData={updateFormData} 
           />
         );
-      case 5:
+      case 6:
         return (
           <SkillsStep 
             formData={formData} 
@@ -181,7 +201,7 @@ const SignUp = () => {
             updateFormData={updateFormData} 
           />
         );
-      case 6:
+      case 7:
         return (
           <VideoResumeStep 
             handleSubmit={handleSubmit} 
@@ -207,18 +227,20 @@ const SignUp = () => {
             <h1 className="text-2xl font-bold">
               {step === 1 && "Create Account"}
               {step === 2 && "Personal Information"}
-              {step === 3 && "Education"}
-              {step === 4 && "Work Experience"}
-              {step === 5 && "Skills & Bio"}
-              {step === 6 && "Video Resume"}
+              {step === 3 && "Address Information"}
+              {step === 4 && "Education"}
+              {step === 5 && "Work Experience"}
+              {step === 6 && "Skills & Bio"}
+              {step === 7 && "Video Resume"}
             </h1>
             <p className="text-muted-foreground text-sm mt-1">
               {step === 1 && "Enter your details to create an account"}
               {step === 2 && "Tell us about yourself"}
-              {step === 3 && "Your educational background"}
-              {step === 4 && "Your work history and preferences"}
-              {step === 5 && "Add your skills and write a short bio"}
-              {step === 6 && "Create a video resume to stand out"}
+              {step === 3 && "Where are you located?"}
+              {step === 4 && "Your educational background"}
+              {step === 5 && "Your work history and preferences"}
+              {step === 6 && "Add your skills and write a short bio"}
+              {step === 7 && "Create a video resume to stand out"}
             </p>
           </div>
 
@@ -239,7 +261,7 @@ const SignUp = () => {
                 </button>
               )}
               
-              {step < 6 ? (
+              {step < 7 ? (
                 <button 
                   type="button" 
                   className={`btn-primary ${step === 1 ? "w-full" : "w-auto px-8"} ml-auto flex items-center justify-center`}
